@@ -6,8 +6,13 @@
     <title>AI DM HUB – User Flow Guide</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        html, body {
+            overflow-x: hidden;
+        }
+
         body {
             background-color: #f6f8fa;
+            overflow-wrap: anywhere;
             font-family: var(--font-family);
             line-height: 1.6;
             color: var(--color-text);
@@ -183,6 +188,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
+            table-layout: fixed;
         }
 
         .comparison-table th,
@@ -190,6 +196,9 @@
             border: 1px solid var(--color-border);
             padding: 0.75rem;
             text-align: left;
+            vertical-align: top;
+            overflow-wrap: anywhere;
+            hyphens: auto;
         }
 
         .comparison-table th {
@@ -242,6 +251,8 @@
         }
 
         code {
+            white-space: normal;
+            overflow-wrap: anywhere;
             background: #f6f8fa;
             padding: 0.2rem 0.4rem;
             border-radius: 2px;
@@ -316,7 +327,7 @@
             color: white;
             text-align: center;
             padding: 2rem 1rem;
-            margin: 3rem -1rem -2rem -1rem;
+            margin: 3rem 0 0 0;
             font-size: 0.9rem;
             border-top: 3px solid var(--color-primary);
         }
@@ -345,6 +356,34 @@
             .comparison-table th,
             .comparison-table td {
                 padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .guide-container {
+                padding: 1.5rem 0.75rem;
+            }
+
+            header.guide-header {
+                margin: -1.5rem -0.75rem 2rem -0.75rem;
+            }
+
+            section {
+                padding: 1rem;
+            }
+
+            .comparison-table {
+                font-size: 0.8rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.4rem;
+            }
+
+            .icon-row .icon {
+                width: 40px;
+                font-size: 1.5rem;
             }
         }
     </style>
