@@ -546,7 +546,7 @@
 
         <!-- FLOWET: 10-SEKUNDERS LARMET -->
         <section class="critical">
-            <h2>⚠️ Flowet: Larm efter 10 sekunder</h2>
+            <h2>⚠️ Flowet: larm efter 10 sekunder</h2>
             <p>
                 Själva hjärtat i AI DM HUB är den automatiska eskaleringen som sker när en maskinansvarig inte svarar på ett kritiskt larm inom 30 sekunder.
                 Efter ytterligare 10 sekunder (40 sekunder totalt) visas larmet med tydlig märkning.
@@ -568,7 +568,7 @@
             <div class="flow-step">
                 <div class="flow-step-number">2</div>
                 <div class="flow-step-content">
-                    <div class="flow-step-title">📤 Larmet skickas till Maskinansvarig</div>
+                    <div class="flow-step-title">📤 Larmet skickas till maskinansvarig</div>
                     <div class="flow-step-description">
                         Anna Bergström (Maskinansvarig) får larmet i sin DM-lista.
                         Systemet förväntar sig ett svar inom 30 sekunder.
@@ -607,7 +607,7 @@
 
         <!-- ÅTGÄRDERNA: BESLUT, DELEGERING, ÅTGÄRD -->
         <section>
-            <h2>🎬 Åtgärderna: Beslut, Delegering, Åtgärd</h2>
+            <h2>🎬 Åtgärderna: beslut, delegering, åtgärd</h2>
             <p>
                 När en operatör tar emot larmet kan operatören registrera tre typer av åtgärder.
                 <strong>Varje åtgärd länkas till ett ärende för komplett spårbarhet.</strong>
@@ -656,32 +656,32 @@
             <h3>Ärendets livscykel</h3>
             <div class="timeline">
                 <div class="timeline-item critical">
-                    <div class="timeline-time">T+0 s: Larm uppstår</div>
+                    <div class="timeline-time">T+0 s: larm uppstår</div>
                     <div class="timeline-description">Maskinen upptäcker ett problem. Systemet skapar <code>CASE-001</code> med status "öppen".</div>
                 </div>
 
                 <div class="timeline-item critical">
-                    <div class="timeline-time">T+40 s: Eskalering</div>
+                    <div class="timeline-time">T+40 s: eskalering</div>
                     <div class="timeline-description">Larmet eskaleras till nästa nivå. Ärendet är fortfarande "öppet".</div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-time">T+1 min: Beslut registreras</div>
+                    <div class="timeline-time">T+1 min: beslut registreras</div>
                     <div class="timeline-description">Erik fattar ett beslut. Det länkas till <code>CASE-001</code>.</div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-time">T+2 min: Delegering</div>
+                    <div class="timeline-time">T+2 min: delegering</div>
                     <div class="timeline-description">Erik delegerar till Lars. Delegeringen länkas till <code>CASE-001</code>.</div>
                 </div>
 
                 <div class="timeline-item success">
-                    <div class="timeline-time">T+5 min: Åtgärden slutförs</div>
+                    <div class="timeline-time">T+5 min: åtgärden slutförs</div>
                     <div class="timeline-description">Lars registrerar åtgärden. Status: "Slutförd". Länkad till <code>CASE-001</code>.</div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-time">T+10 min: Ärendet stängs</div>
+                    <div class="timeline-time">T+10 min: ärendet stängs</div>
                     <div class="timeline-description">Ärendets status ändras till "löst". Historiken är komplett och spårbar.</div>
                 </div>
             </div>
