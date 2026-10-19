@@ -160,9 +160,13 @@ class AIHubApp {
         document.getElementById("tabMessages").addEventListener("click", () => this.switchTab("messages"));
         document.getElementById("tabCases").addEventListener("click", () => this.switchTab("cases"));
 
+        this.composer = new Composer(this, this.messageInput);
         this.sendBtn.addEventListener("click", () => this.handleSendMessage());
-        this.messageInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter" && !e.shiftKey) this.handleSendMessage();
+        this.messageInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey && !this.composer.isOpen) {
+                e.preventDefault();
+                this.handleSendMessage();
+            }
         });
         this.resetBtn.addEventListener("click", () => this.handleReset());
         this.historyToggleBtn?.addEventListener("click", () => this.toggleHistory());
@@ -400,6 +404,7 @@ class AIHubApp {
         this.conversationTitle.innerHTML = `
             <span>${icons}</span>
             <span>${this.escape(names)}</span>
+            ${this.renderInvited(conv)}
         `;
 
         // Only mark as read if user manually opened it (not when alarm auto-opens)
@@ -462,7 +467,7 @@ class AIHubApp {
             } else if (msg.type === "acknowledgment") {
                 content += `<em>${e(msg.text)}</em>`;
             } else {
-                content += e(msg.text);
+                content += this.highlightRefs(e(msg.text));
             }
 
             // Add timestamp and sender name for regular messages
@@ -479,8 +484,8 @@ class AIHubApp {
             this.messagesContainer.appendChild(div);
         });
 
-        // Scroll to bottom
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        if (this.historyPanel.style.display !== "none") this.renderHistory();
     }
 
     async handleSendMessage() {
@@ -581,7 +586,7 @@ class AIHubApp {
             {
                 keywords: ["vad", "fel", "problem", "varför", "diagnos"],
                 data: "HPM-2400 mätutrustning rapporterar: Temperatur 127°C (överskridning +42°C), Tryck 52 bar (normal 50±2)",
-                interpretation: "Sensorn detekterar en kritisk temperaturöverkridning. Detta indikerar möjlig värmeackumulering, bristande kylcirkulation eller överbelastning på systemet.",
+                interpretation: "Sensorn detekterar en kritisk temperaturöverskridning. Detta indikerar möjlig värmeackumulering, bristande kylcirkulation eller överbelastning på systemet.",
                 recommendation: "Prioritet: Stanna omedelbar drift. Inspektera: (1) Kylslangarna för blockering, (2) Fläkten för felaktighet, (3) Pumpen för läckage."
             },
             // 2. Historik / vad hände
@@ -882,14 +887,120 @@ class AIHubApp {
         this.startAlarmTimer();
     }
 
-    toggleHistory() {
-        if (this.historyPanel.style.display === "none") {
-            this.historyPanel.style.display = "block";
-            this.historyToggleBtn.textContent = "📋 Dölj Historik";
-        } else {
-            this.historyPanel.style.display = "none";
-            this.historyToggleBtn.textContent = "📋 Historik";
+    toggleHistory(force) {
+        const open = force ?? this.historyPanel.style.display === "none";
+        this.historyPanel.style.display = open ? "block" : "none";
+        this.historyToggleBtn.setAttribute("aria-expanded", String(open));
+        this.historyToggleBtn.textContent = open ? "🕘 Dölj historik" : "🕘 Historik";
+        if (open) {
+            this.renderHistory();
+            this.historyPanel.focus();
         }
+    }
+
+    // FR-023/FR-024: chronological case history with event type and actor.
+    buildHistory(caseObj) {
+        const nameOf = (id) => (mockDataHelpers.getUserById(id) || mockDataHelpers.getBotById(id))?.name || id;
+        const events = [];
+        const msgs = caseObj.conversationId ? mockData.messages.filter(m => m.conversationId === caseObj.conversationId) : [];
+        const relevant = (m) => !caseObj.alarmIds.length || m.timestamp >= caseObj.createdAt;
+
+        events.push({ at: caseObj.createdAt, icon: "📋", type: "Ärende skapat", actor: "Hubben (automatiskt)",
+            detail: `${caseObj.caseId} – ${caseObj.title}. Status: ${caseObj.status}, prioritet: ${caseObj.priority}` });
+
+        caseObj.alarmIds.forEach(id => {
+            const a = mockDataHelpers.getAlarmById(id);
+            if (!a?.createdAt) return;
+            events.push({ at: a.createdAt, icon: "🚨", type: "Ursprungligt maskinlarm", actor: nameOf("bot_hpm"),
+                detail: `${a.originalMessage}. ${a.sensor}: ${a.sensorValue}${a.sensorUnit} (normal ${a.normalValue}${a.sensorUnit}), nivå ${a.level}` });
+            if (a.escalatedAt) {
+                events.push({ at: a.escalatedAt, icon: "⬆️", type: "Eskalering", actor: "Hubben (regel " + a.ruleSource + ")",
+                    detail: `Maskinansvarig kvitterade inte i tid → ${nameOf(a.escalatedTo)} (Maskingruppsansvarig)` });
+            }
+        });
+
+        msgs.filter(relevant).forEach(m => {
+            const md = m.metadata || {};
+            if (m.type === "text" && m.senderId === this.currentUserId) {
+                events.push({ at: m.timestamp, icon: "❓", type: "Fråga", actor: nameOf(m.senderId), detail: m.text });
+            } else if (m.type === "bot_response") {
+                events.push({ at: m.timestamp, icon: "🤖", type: "Botens tolkning och rekommendation (beslutsstöd)", actor: nameOf(m.senderId),
+                    detail: `Tolkning: ${md.interpretation} Rekommendation: ${md.recommendation}` });
+            } else if (m.type === "acknowledgment") {
+                events.push({ at: m.timestamp, icon: "✅", type: "Kvittering", actor: md.acknowledgedBy || nameOf(m.senderId), detail: m.text });
+            }
+        });
+
+        caseObj.decisions.forEach(d => events.push({ at: d.timestamp, icon: "💡", type: "Beslut", actor: d.maker, detail: d.text }));
+        caseObj.delegations.forEach(d => events.push({ at: d.timestamp, icon: "📨", type: "Delegering", actor: `${d.from} → ${d.to}`, detail: `${d.task} (status: ${d.status})` }));
+        caseObj.actions.forEach(a => events.push({ at: a.timestamp, icon: "🛠️", type: "Åtgärd (utförd av människa)", actor: a.performer, detail: `${a.text} (status: ${a.status})` }));
+
+        return events.sort((x, y) => new Date(x.at) - new Date(y.at));
+    }
+
+    caseParticipants(caseObj) {
+        const conv = caseObj.conversationId && mockDataHelpers.getConversationById(caseObj.conversationId);
+        const ids = new Set([this.currentUserId, ...(conv ? [...conv.participantIds, ...(conv.invitedIds || [])] : [])]);
+        if (caseObj.alarmIds.length) ids.add("usr_001");
+        caseObj.delegations.forEach(d => { const u = mockData.users.find(x => x.name === d.to); if (u) ids.add(u.userId); });
+        return [...ids].map(id => mockDataHelpers.getUserById(id) || mockDataHelpers.getBotById(id)).filter(Boolean);
+    }
+
+    renderHistory() {
+        const e = (s) => this.escape(s);
+        const caseObj = this.currentCaseId && mockDataHelpers.getCaseById(this.currentCaseId);
+        if (!caseObj) {
+            this.historyContent.innerHTML = "<p class='history-detail'>Välj en konversation eller ett ärende med kopplat ärende för att se historiken.</p>";
+            return;
+        }
+        const people = this.caseParticipants(caseObj)
+            .map(p => `${p.type === "bot" ? "🤖" : "👤"} ${e(p.name)}${p.role ? ` (${e(p.role)})` : ""}`).join(", ");
+        const items = this.buildHistory(caseObj).map(ev => `
+            <li class="history-item">
+                <span class="history-icon" aria-hidden="true">${ev.icon}</span>
+                <div class="history-text">
+                    <div class="history-type">${e(ev.type)}</div>
+                    <div class="history-detail"><strong>Aktör:</strong> ${e(ev.actor)}</div>
+                    <div class="history-detail">${e(ev.detail)}</div>
+                    <div class="history-time"><time datetime="${new Date(ev.at).toISOString()}">${new Date(ev.at).toLocaleString("sv-SE")}</time></div>
+                </div>
+            </li>`).join("");
+        this.historyContent.innerHTML = `
+            <p class="history-detail"><strong>Ärende:</strong> ${e(caseObj.caseId)} – ${e(caseObj.title)}</p>
+            <p class="history-detail"><strong>Deltagare:</strong> ${people}</p>
+            <ol class="history-list" aria-label="Händelser i kronologisk ordning">${items}</ol>`;
+    }
+
+    renderInvited(conv) {
+        const ids = conv.invitedIds || [];
+        if (!ids.length) return "";
+        const names = ids.map(id => (mockDataHelpers.getUserById(id) || mockDataHelpers.getBotById(id))?.name || id);
+        return `<span class="invited" aria-label="Inkopplade deltagare">+ ${names.map(n => this.escape(n)).join(", ")}</span>`;
+    }
+
+    highlightRefs(html) {
+        return html
+            .replace(/(^|\s)(@[A-ZÅÄÖ][\wåäöÅÄÖ.-]*(?: [A-ZÅÄÖ0-9][\wåäöÅÄÖ.-]*){0,3})/g, '$1<span class="mention">$2</span>')
+            .replace(/\[([^\]\n]{1,160})\]/g, '<span class="ref-chip">$1</span>');
+    }
+
+    async inviteParticipant(participantId) {
+        if (!this.currentConversationId) return;
+        const conv = mockDataHelpers.getConversationById(this.currentConversationId);
+        const before = (conv.invitedIds || []).length;
+        try {
+            await api.invite(this.currentConversationId, participantId);
+        } catch (err) {
+            this.showError(err);
+            return;
+        }
+        if ((conv.invitedIds || []).length === before) return;
+        const who = (mockDataHelpers.getUserById(participantId) || mockDataHelpers.getBotById(participantId))?.name || participantId;
+        this.toast(`👥 ${who} kopplad till konversationen`, "#0066cc");
+        const participants = mockDataHelpers.getConversationParticipants(this.currentConversationId);
+        const icons = participants.map(p => p.type === "bot" ? "🤖" : "👤").join(" ");
+        this.conversationTitle.innerHTML = `<span>${icons}</span><span>${this.escape(conv.title)}</span>${this.renderInvited(conv)}`;
+        if (this.historyPanel.style.display !== "none") this.renderHistory();
     }
 
     showSettings() {
@@ -966,6 +1077,7 @@ class AIHubApp {
 
         this.renderCaseContent(caseObj);
         this.renderCasesList();
+        if (this.historyPanel.style.display !== "none") this.renderHistory();
     }
 
     renderCaseContent(caseObj) {

@@ -1,0 +1,56 @@
+# FEAT-history: Ärendehistorik
+
+**Status:** Done
+**PRD-länk:** UC-09, FR-023, FR-024, AC-011, SEC-005, TEST-001
+**Relaterade FEAT:** FEAT-actions, FEAT-critical-alert, FEAT-mentions
+
+## 1. Syfte
+Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronologisk ordning, med händelsetyp och aktör tydliga, så att det går att granska vem som beslutade och utförde vad.
+
+## 2. Omfattning
+- **Ingår:** Historikpanel (knappen "🕘 Historik" i headern) för aktuellt ärende; samtliga spårbarhetsfält enligt FR-023.
+- **Utgår:** Export, filtrering, redigering av historik.
+
+## 3. Relaterade PRD-ID:n
+
+| Typ | ID | Beskrivning |
+|-----|----|----|
+| FR | FR-023 | Ärende, ursprungligt larm, botens tolkning och rekommendation, frågor, deltagare, delegering, beslut, kvittering, tidsstämplar, utförare |
+| FR | FR-024 | Kronologisk, händelsetyp och aktör tydliga |
+| AC | AC-011 | Samtliga spårbarhetsfält i kronologisk ordning |
+| SEC | SEC-005 | Mänsklig beslutsfattare och utförare tydliga |
+
+## 4. Fält → källa
+
+| FR-023-fält | Händelsetyp i panelen | Källa |
+|---|---|---|
+| Ärende | Rubrik + "Ärende skapat" | `cases` |
+| Ursprungligt maskinlarm | "Ursprungligt maskinlarm" (+ "Eskalering") | `alarms` |
+| Botens tolkning och rekommendation | "Botens tolkning och rekommendation (beslutsstöd)" | `messages` typ `bot_response` |
+| Ställda frågor | "Fråga" | `messages` typ `text` från aktuell användare |
+| Deltagare | Rubrikrad "Deltagare" | konversationens deltagare + `invited_ids` + Maskinansvarig + delegeringsmottagare |
+| Delegering | "Delegering" (från → till, status) | `case_events` kind `delegation` |
+| Beslut | "Beslut" | `case_events` kind `decision` |
+| Kvittering | "Kvittering" | `messages` typ `acknowledgment` |
+| Utförare | "Åtgärd (utförd av människa)" med aktör | `case_events` kind `action` |
+| Tidsstämplar | `<time datetime>` per händelse | `created_at` |
+
+## 5. UI-krav
+- Panelen är `aside` med `aria-label="Ärendehistorik"`, händelser i `<ol>`; knappen har `aria-expanded`/`aria-controls`.
+- Varje händelse: ikon + typtext + "Aktör:" + detalj + tid (ej färg-ensam).
+- Uppdateras automatiskt när nya meddelanden eller actions sparas medan panelen är öppen.
+
+## 6. Kantfall
+- Konversation utan ärende: förklarande text i stället för tom lista.
+- Avslutade äldre ärenden (CASE-001/002): visar ärendeskapande och eventuella events.
+
+## 7. Test
+
+| TEST-ID | AC-ID | Verifiering |
+|---------|-------|------------|
+| TEST-001 | AC-011 | Efter larm, fråga, botsvar, beslut och kvittering visar panelen samtliga typer, alla tidsstämplar stigande |
+
+## 8. Definition of Done
+- [x] Implementerad (`AIHubApp.buildHistory/renderHistory` i `src/app.js`)
+- [x] Kronologisk ordning verifierad automatiskt (stigande `datetime`)
+- [x] Desktop och mobil utan horisontell scroll

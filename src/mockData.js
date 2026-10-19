@@ -300,7 +300,7 @@ const mockData = {
             escalatedTo: null,
             escalationReason: null,
             escalatedAt: null,
-            originalMessage: "Temperaturöverkridning detekterad på HPM-2400",
+            originalMessage: "Temperaturöverskridning detekterad på HPM-2400",
             sensorValue: 127,
             sensorUnit: "°C",
             normalValue: 85,
@@ -393,7 +393,7 @@ const mockDataHelpers = {
         alarm.status = "pending";
         alarm.escalatedTo = "Erik Svensson"; // Escalate to Maskingruppsansvarig
         alarm.escalationReason = "no_ack_timeout";
-        alarm.escalatedAt = new Date(now.getTime() + 5000); // Escalate efter 5 sek (no ack)
+        alarm.escalatedAt = now;
 
         // Uppdatera ENDAST HPM-2400 bot konversationen (conv_hpm_001), inte Anna's
         let conv = mockData.conversations.find(c => c.conversationId === "conv_hpm_001");

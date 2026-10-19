@@ -1,5 +1,18 @@
 # CHANGELOG för AI DM HUB
 
+## [2.1] – 2026-10-19 – @, / och historik
+
+### Tillagt
+- @-omnämnanden: söker kollegor/botar, kopplar in vald deltagare i konversationen (FR-021, AC-004, AC-009)
+- /-referenser: infogar ärenden, larm, parametrar och maskiner i texten (FR-022, AC-010)
+- Historikpanel med samtliga FR-023-fält i kronologisk ordning (FR-023, FR-024, AC-011)
+- Migration `20261019120000_invited_participants.sql` (`conversations.invited_ids`)
+- hCaptcha-stöd för anonym inloggning (`hcaptchaSiteKey` i `src/config.js`)
+- Specs FEAT-mentions, FEAT-history; evalresultat `evals/results/2026-10-19-backend.md`
+
+### Ändrat
+- readiness.md och traceability.md omskrivna efter faktiska resultat
+
 ## [2.0] – 2026-10-19 – aidmhub-live: backend
 
 ### Tillagt

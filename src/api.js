@@ -15,12 +15,40 @@ const api = {
 
         const { data: { session } } = await this.db.auth.getSession();
         if (!session) {
-            const { error } = await this.db.auth.signInAnonymously();
+            const captchaToken = cfg.hcaptchaSiteKey ? await this.getCaptchaToken(cfg.hcaptchaSiteKey) : undefined;
+            const { error } = await this.db.auth.signInAnonymously(captchaToken ? { options: { captchaToken } } : undefined);
             if (error) throw error;
         }
         await this.rpc("start_scenario");
         await this.loadReference();
         await this.refresh();
+    },
+
+    // hCaptcha is only needed once per browser, when the anonymous session is created.
+    getCaptchaToken(siteKey) {
+        return new Promise((resolve, reject) => {
+            const run = () => {
+                const box = document.createElement("div");
+                box.id = "captchaBox";
+                box.setAttribute("role", "dialog");
+                box.setAttribute("aria-label", "Verifiering innan demo startar");
+                box.style.cssText = "position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:rgba(0,0,0,.55);z-index:10000;color:#fff;text-align:center;padding:16px;";
+                box.innerHTML = "<p><strong>Starta demosession</strong><br>Bekräfta att du är en människa. All data i demon är fiktiv.</p><div id='captchaWidget'></div>";
+                document.body.appendChild(box);
+                window.hcaptcha.render("captchaWidget", {
+                    sitekey: siteKey,
+                    callback: (token) => { box.remove(); resolve(token); },
+                    "error-callback": () => { box.remove(); reject(new Error("captcha failed")); }
+                });
+            };
+            if (window.hcaptcha) return run();
+            window.onHcaptchaLoad = run;
+            const sc = document.createElement("script");
+            sc.src = "https://js.hcaptcha.com/1/api.js?onload=onHcaptchaLoad&render=explicit&hl=sv";
+            sc.async = true;
+            sc.onerror = () => reject(new Error("captcha script failed to load"));
+            document.head.appendChild(sc);
+        });
     },
 
     async rpc(fn, args) {
@@ -62,6 +90,7 @@ const api = {
             lastMessage: x.last_message,
             lastActivity: new Date(x.last_activity),
             unreadCount: x.unread_count,
+            invitedIds: x.invited_ids || [],
             priority: x.priority,
             status: x.status,
             alarmId: x.alarm_id,
@@ -139,6 +168,17 @@ const api = {
         if (conv) conv.unreadCount = count;
         if (!this.online) return;
         const { error } = await this.db.from("conversations").update({ unread_count: count }).eq("conversation_id", conversationId);
+        if (error) throw error;
+    },
+
+    async invite(conversationId, participantId) {
+        const conv = mockDataHelpers.getConversationById(conversationId);
+        if (!conv) return;
+        const all = [...conv.participantIds, ...(conv.invitedIds || [])];
+        if (all.includes(participantId)) return;
+        conv.invitedIds = [...(conv.invitedIds || []), participantId];
+        if (!this.online) return;
+        const { error } = await this.db.from("conversations").update({ invited_ids: conv.invitedIds }).eq("conversation_id", conversationId);
         if (error) throw error;
     },
 

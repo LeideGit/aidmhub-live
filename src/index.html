@@ -23,6 +23,7 @@
                 <span id="modeBadge" class="status-text" style="margin-left: 0.75rem;" aria-live="polite">Ansluter…</span>
             </div>
             <div class="header-controls">
+                <button id="historyToggleBtn" class="control-btn" aria-controls="historyPanel" aria-expanded="false" title="Visa ärendets historik">🕘 Historik</button>
                 <a href="guide.html" class="control-btn" title="Läs guiden" style="text-decoration: none; display: flex; align-items: center;">
                     📖 Guide
                 </a>
@@ -115,7 +116,7 @@
                             type="text"
                             id="messageInput"
                             class="message-input"
-                            placeholder="Ställ en fråga eller skriv ett meddelande (starta med @ eller / för sökning)..."
+                            placeholder="Skriv ett meddelande – @ kopplar in kollega/bot, / infogar ärende eller parameter"
                             aria-label="Meddelandeinmatning"
                         >
                         <button id="sendBtn" class="send-btn" title="Skicka meddelande">Skicka</button>
@@ -125,7 +126,7 @@
         </div>
 
         <!-- History Panel (Bottom, toggleable on mobile) -->
-        <aside id="historyPanel" class="history-panel" style="display: none;">
+        <aside id="historyPanel" class="history-panel" style="display: none;" tabindex="-1" aria-label="Ärendehistorik">
             <div class="history-header">
                 <h3>Historik</h3>
                 <button id="closeHistoryBtn" class="close-btn" aria-label="Stäng historik">×</button>
@@ -221,6 +222,7 @@
     <script src="config.js"></script>
     <script src="mockData.js"></script>
     <script src="api.js"></script>
+    <script src="composer.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

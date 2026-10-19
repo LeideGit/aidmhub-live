@@ -10,13 +10,13 @@ Denna katalog innehåller genomförbara FEAT-specifikationer för alla core-feat
 | FEAT-critical-alert | Automatiskt kritiskt eskalerat larm | Pending | OBJ-01, OBJ-02 | AC-001, AC-002, AC-003 | TEST-001, TEST-002 |
 | FEAT-conversation | Botdialog med Q&A | Pending | OBJ-03 | AC-005 | TEST-001, TEST-004 |
 | FEAT-actions | Beslut, delegering, åtgärd | Pending | OBJ-03, OBJ-04 | AC-006, AC-007, AC-008 | TEST-003 |
-| FEAT-mentions | @-omnämnanden för kollegor/botar | Pending | OBJ-05 | AC-004, AC-009 | TEST-004, TEST-005 |
-| FEAT-slashcommands | /-kommandon för ärenden/parametrar | Pending | OBJ-05 | AC-010 | TEST-004 |
-| FEAT-history | Kronologisk historik med full spårbarhet | Pending | OBJ-03, OBJ-04 | AC-011 | TEST-001 |
+| FEAT-mentions | @-omnämnanden och /-referenser | Done | OBJ-05 | AC-004, AC-009 | TEST-004, TEST-005 |
+| FEAT-slashcommands | /-kommandon (ingår i FEAT-mentions) | Done | OBJ-05 | AC-010 | TEST-004 |
+| FEAT-history | Kronologisk historik med full spårbarhet | Done | OBJ-03, OBJ-04 | AC-011 | TEST-001 |
 | FEAT-responsive | Responsiv layout (desktop/tablet/mobil) | Pending | OBJ-06 | AC-014 | TEST-007 |
 | FEAT-accessibility | Tangentbord, fokus, ARIA, semantik | Pending | NFR-003, NFR-004 | AC-014 | TEST-008 |
 | FEAT-security-barriers | Säkerhetsmärkning (aldrig maskinstyrning) | Pending | SEC-001–SEC-003 | AC-015 | TEST-009, TEST-010 |
-| FEAT-demo-reset | Scenarioåterställning för upprepad körning | Pending | OBJ-01 | AC-013 | TEST-006 |
+| FEAT-demo-reset | Scenarioåterställning (RPC reset_scenario) | Done | OBJ-01 | AC-013 | TEST-006 |
 
 ## Status-förklaringar
 
