@@ -1,5 +1,11 @@
 # CHANGELOG för AI DM HUB
 
+## [2.2] – 2026-10-19 – Historik i ärendevyn
+
+### Ändrat
+- Den separata historikpanelen och knappen i sidhuvudet är borttagna; ärendevyn visar nu hela historiken enligt FR-023 (larm, eskalering, frågor, botsvar, beslut, delegering, åtgärd, kvittering, deltagare)
+- Ärendestatus och prioritet visas på svenska i historiken
+
 ## [2.1] – 2026-10-19 – @, / och historik
 
 ### Tillagt

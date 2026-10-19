@@ -1,4 +1,4 @@
-# FEAT-history: Ärendehistorik
+# FEAT-history: Ärendehistorik i ärendevyn
 
 **Status:** Done
 **PRD-länk:** UC-09, FR-023, FR-024, AC-011, SEC-005, TEST-001
@@ -7,9 +7,11 @@
 ## 1. Syfte
 Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronologisk ordning, med händelsetyp och aktör tydliga, så att det går att granska vem som beslutade och utförde vad.
 
+**Beslut 2026-10-19 (Johan Leidefors):** Historiken visas i ärendevyn (fliken Ärenden → välj ärende). Den separata historikpaneln och knappen i sidhuvudet är borttagna eftersom de var redundanta. PRD:ns krav FR-023, FR-024 och AC-011 är oförändrade; de uppfylls nu av ärendevyn.
+
 ## 2. Omfattning
-- **Ingår:** Historikpanel (knappen "🕘 Historik" i headern) för aktuellt ärende; samtliga spårbarhetsfält enligt FR-023.
-- **Utgår:** Export, filtrering, redigering av historik.
+- **Ingår:** Avsnittet "Historik" i ärendevyn för valt ärende; samtliga spårbarhetsfält enligt FR-023.
+- **Utgår:** Separat historikpanel, export, filtrering, redigering av historik.
 
 ## 3. Relaterade PRD-ID:n
 
@@ -24,7 +26,7 @@ Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronolo
 
 | FR-023-fält | Händelsetyp i panelen | Källa |
 |---|---|---|
-| Ärende | Rubrik + "Ärende skapat" | `cases` |
+| Ärende | Ärendehuvud + "Ärende skapat" | `cases` |
 | Ursprungligt maskinlarm | "Ursprungligt maskinlarm" (+ "Eskalering") | `alarms` |
 | Botens tolkning och rekommendation | "Botens tolkning och rekommendation (beslutsstöd)" | `messages` typ `bot_response` |
 | Ställda frågor | "Fråga" | `messages` typ `text` från aktuell användare |
@@ -36,9 +38,9 @@ Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronolo
 | Tidsstämplar | `<time datetime>` per händelse | `created_at` |
 
 ## 5. UI-krav
-- Panelen är `aside` med `aria-label="Ärendehistorik"`, händelser i `<ol>`; knappen har `aria-expanded`/`aria-controls`.
+- Avsnittet är `section` med `aria-label="Ärendehistorik"`, händelser i `<ol>` med `<time datetime>`.
 - Varje händelse: ikon + typtext + "Aktör:" + detalj + tid (ej färg-ensam).
-- Uppdateras automatiskt när nya meddelanden eller actions sparas medan panelen är öppen.
+- Händelser med samma tidsstämpel ordnas larm → eskalering → ärende skapat.
 
 ## 6. Kantfall
 - Konversation utan ärende: förklarande text i stället för tom lista.
@@ -48,9 +50,9 @@ Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronolo
 
 | TEST-ID | AC-ID | Verifiering |
 |---------|-------|------------|
-| TEST-001 | AC-011 | Efter larm, fråga, botsvar, beslut och kvittering visar panelen samtliga typer, alla tidsstämplar stigande |
+| TEST-001 | AC-011 | Efter larm, @-inkoppling, fråga, botsvar, beslut, delegering, åtgärd och kvittering visar ärendevyn samtliga 9 händelsetyper och 4 deltagare, alla tidsstämplar stigande |
 
 ## 8. Definition of Done
-- [x] Implementerad (`AIHubApp.buildHistory/renderHistory` i `src/app.js`)
+- [x] Implementerad (`AIHubApp.buildHistory` + `renderCaseContent` i `src/app.js`)
 - [x] Kronologisk ordning verifierad automatiskt (stigande `datetime`)
 - [x] Desktop och mobil utan horisontell scroll

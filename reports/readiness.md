@@ -25,7 +25,7 @@ Hela demonstrationsflödet är implementerat, inklusive persistent backend (Supa
 | AC-008 | Åtgärd sparas med utförare, status, tid | ✅ Verifierad | Online, manuellt bekräftat |
 | AC-009 | @ öppnar val, valt objekt infogas/kopplas | ✅ Verifierad | Desktop + mobil offline; online manuellt |
 | AC-010 | / öppnar val, valt objekt infogas i texten | ✅ Verifierad | Desktop + mobil offline; online manuellt |
-| AC-011 | Historiken visar samtliga spårbarhetsfält kronologiskt | ✅ Verifierad | 7 händelsetyper + deltagare, stigande tid; online manuellt |
+| AC-011 | Historiken visar samtliga spårbarhetsfält kronologiskt | ✅ Verifierad | I ärendevyn: 9 händelsetyper + deltagare, stigande tid (separat panel borttagen 2026-10-19) |
 | AC-012 | DM-lista med flera människor och botar, skiljbara | ✅ Verifierad | 2 kollegor + 3 botar, ikon + text |
 | AC-013 | Scenario kan återställas och köras igen | ✅ Verifierad | `reset_scenario()`, endast CASE-001/002 kvar |
 | AC-014 | Responsiv och tillgänglig | ⚠️ Delvis | Responsivitet ✅ (1920/375 px automatiskt + manuellt bekräftat); skärmläsare [TBD] |
@@ -38,7 +38,7 @@ Hela demonstrationsflödet är implementerat, inklusive persistent backend (Supa
 - **SEC-001:** Inga tabeller, RPC:er eller endpoints för maskinstyrning. LLM-guarden ersätter svar som påstår maskinåtgärder (7/7 blockerade i Node-körning).
 - **SEC-002/003:** Botsvar rubriceras "Rekommendation (beslutsstöd)" med källa; LLM-svar får säkerhetsfot.
 - **SEC-004:** Endast fiktiv seed-data. Fritext sparas per anonym session; CAPTCHA aktiverad mot missbruk.
-- **SEC-005:** `case_events` + historikpanel visar aktör, mottagare, status och tid.
+- **SEC-005:** `case_events` + ärendevyns historik visar aktör, mottagare, status och tid.
 - **Åtkomst:** RLS verifierad: nekad läsning utan session, nekad skrivning i referensdata, nekad förfalskad `owner`, isolerade sessioner.
 
 ## Blockerare

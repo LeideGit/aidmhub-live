@@ -135,7 +135,6 @@ class AIHubApp {
         this.messageInput = document.getElementById("messageInput");
         this.sendBtn = document.getElementById("sendBtn");
         this.resetBtn = document.getElementById("resetBtn");
-        this.historyToggleBtn = document.getElementById("historyToggleBtn");
         this.settingsBtn = document.getElementById("settingsBtn");
         this.conversationPanel = document.querySelector(".conversation-panel");
         this.noSelection = document.getElementById("noSelection");
@@ -150,9 +149,6 @@ class AIHubApp {
         this.decisionBtn = document.getElementById("decisionBtn");
         this.delegationBtn = document.getElementById("delegationBtn");
         this.actionBtn = document.getElementById("actionBtn");
-        this.historyPanel = document.getElementById("historyPanel");
-        this.historyContent = document.getElementById("historyContent");
-        this.closeHistoryBtn = document.getElementById("closeHistoryBtn");
     }
 
     bindEvents() {
@@ -169,13 +165,11 @@ class AIHubApp {
             }
         });
         this.resetBtn.addEventListener("click", () => this.handleReset());
-        this.historyToggleBtn?.addEventListener("click", () => this.toggleHistory());
         this.settingsBtn?.addEventListener("click", () => this.showSettings());
         this.ackBtn.addEventListener("click", () => this.handleAcknowledge());
         this.decisionBtn.addEventListener("click", () => this.openModal("decisionModal"));
         this.delegationBtn.addEventListener("click", () => this.openModal("delegationModal"));
         this.actionBtn.addEventListener("click", () => this.openModal("actionModal"));
-        this.closeHistoryBtn?.addEventListener("click", () => this.historyPanel.style.display = "none");
 
         // Delegation recipient search
         document.getElementById("delegationRecipient").addEventListener("input", (e) => {
@@ -485,7 +479,6 @@ class AIHubApp {
         });
 
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-        if (this.historyPanel.style.display !== "none") this.renderHistory();
     }
 
     async handleSendMessage() {
@@ -887,17 +880,6 @@ class AIHubApp {
         this.startAlarmTimer();
     }
 
-    toggleHistory(force) {
-        const open = force ?? this.historyPanel.style.display === "none";
-        this.historyPanel.style.display = open ? "block" : "none";
-        this.historyToggleBtn.setAttribute("aria-expanded", String(open));
-        this.historyToggleBtn.textContent = open ? "🕘 Dölj historik" : "🕘 Historik";
-        if (open) {
-            this.renderHistory();
-            this.historyPanel.focus();
-        }
-    }
-
     // FR-023/FR-024: chronological case history with event type and actor.
     buildHistory(caseObj) {
         const nameOf = (id) => (mockDataHelpers.getUserById(id) || mockDataHelpers.getBotById(id))?.name || id;
@@ -905,16 +887,18 @@ class AIHubApp {
         const msgs = caseObj.conversationId ? mockData.messages.filter(m => m.conversationId === caseObj.conversationId) : [];
         const relevant = (m) => !caseObj.alarmIds.length || m.timestamp >= caseObj.createdAt;
 
-        events.push({ at: caseObj.createdAt, icon: "📋", type: "Ärende skapat", actor: "Hubben (automatiskt)",
-            detail: `${caseObj.caseId} – ${caseObj.title}. Status: ${caseObj.status}, prioritet: ${caseObj.priority}` });
+        const statusSv = { open: "öppen", resolved: "löst" }[caseObj.status] || caseObj.status;
+        const prioSv = { critical: "kritisk", normal: "normal" }[caseObj.priority] || caseObj.priority;
+        events.push({ at: caseObj.createdAt, order: 2, icon: "📋", type: "Ärende skapat", actor: "Hubben (automatiskt)",
+            detail: `${caseObj.caseId} – ${caseObj.title}. Status: ${statusSv}, prioritet: ${prioSv}` });
 
         caseObj.alarmIds.forEach(id => {
             const a = mockDataHelpers.getAlarmById(id);
             if (!a?.createdAt) return;
-            events.push({ at: a.createdAt, icon: "🚨", type: "Ursprungligt maskinlarm", actor: nameOf("bot_hpm"),
+            events.push({ at: a.createdAt, order: 0, icon: "🚨", type: "Ursprungligt maskinlarm", actor: nameOf("bot_hpm"),
                 detail: `${a.originalMessage}. ${a.sensor}: ${a.sensorValue}${a.sensorUnit} (normal ${a.normalValue}${a.sensorUnit}), nivå ${a.level}` });
             if (a.escalatedAt) {
-                events.push({ at: a.escalatedAt, icon: "⬆️", type: "Eskalering", actor: "Hubben (regel " + a.ruleSource + ")",
+                events.push({ at: a.escalatedAt, order: 1, icon: "⬆️", type: "Eskalering", actor: "Hubben (regel " + a.ruleSource + ")",
                     detail: `Maskinansvarig kvitterade inte i tid → ${nameOf(a.escalatedTo)} (Maskingruppsansvarig)` });
             }
         });
@@ -935,7 +919,7 @@ class AIHubApp {
         caseObj.delegations.forEach(d => events.push({ at: d.timestamp, icon: "📨", type: "Delegering", actor: `${d.from} → ${d.to}`, detail: `${d.task} (status: ${d.status})` }));
         caseObj.actions.forEach(a => events.push({ at: a.timestamp, icon: "🛠️", type: "Åtgärd (utförd av människa)", actor: a.performer, detail: `${a.text} (status: ${a.status})` }));
 
-        return events.sort((x, y) => new Date(x.at) - new Date(y.at));
+        return events.sort((x, y) => (new Date(x.at) - new Date(y.at)) || ((x.order ?? 9) - (y.order ?? 9)));
     }
 
     caseParticipants(caseObj) {
@@ -944,31 +928,6 @@ class AIHubApp {
         if (caseObj.alarmIds.length) ids.add("usr_001");
         caseObj.delegations.forEach(d => { const u = mockData.users.find(x => x.name === d.to); if (u) ids.add(u.userId); });
         return [...ids].map(id => mockDataHelpers.getUserById(id) || mockDataHelpers.getBotById(id)).filter(Boolean);
-    }
-
-    renderHistory() {
-        const e = (s) => this.escape(s);
-        const caseObj = this.currentCaseId && mockDataHelpers.getCaseById(this.currentCaseId);
-        if (!caseObj) {
-            this.historyContent.innerHTML = "<p class='history-detail'>Välj en konversation eller ett ärende med kopplat ärende för att se historiken.</p>";
-            return;
-        }
-        const people = this.caseParticipants(caseObj)
-            .map(p => `${p.type === "bot" ? "🤖" : "👤"} ${e(p.name)}${p.role ? ` (${e(p.role)})` : ""}`).join(", ");
-        const items = this.buildHistory(caseObj).map(ev => `
-            <li class="history-item">
-                <span class="history-icon" aria-hidden="true">${ev.icon}</span>
-                <div class="history-text">
-                    <div class="history-type">${e(ev.type)}</div>
-                    <div class="history-detail"><strong>Aktör:</strong> ${e(ev.actor)}</div>
-                    <div class="history-detail">${e(ev.detail)}</div>
-                    <div class="history-time"><time datetime="${new Date(ev.at).toISOString()}">${new Date(ev.at).toLocaleString("sv-SE")}</time></div>
-                </div>
-            </li>`).join("");
-        this.historyContent.innerHTML = `
-            <p class="history-detail"><strong>Ärende:</strong> ${e(caseObj.caseId)} – ${e(caseObj.title)}</p>
-            <p class="history-detail"><strong>Deltagare:</strong> ${people}</p>
-            <ol class="history-list" aria-label="Händelser i kronologisk ordning">${items}</ol>`;
     }
 
     renderInvited(conv) {
@@ -1000,7 +959,6 @@ class AIHubApp {
         const participants = mockDataHelpers.getConversationParticipants(this.currentConversationId);
         const icons = participants.map(p => p.type === "bot" ? "🤖" : "👤").join(" ");
         this.conversationTitle.innerHTML = `<span>${icons}</span><span>${this.escape(conv.title)}</span>${this.renderInvited(conv)}`;
-        if (this.historyPanel.style.display !== "none") this.renderHistory();
     }
 
     showSettings() {
@@ -1077,7 +1035,6 @@ class AIHubApp {
 
         this.renderCaseContent(caseObj);
         this.renderCasesList();
-        if (this.historyPanel.style.display !== "none") this.renderHistory();
     }
 
     renderCaseContent(caseObj) {
@@ -1125,82 +1082,33 @@ class AIHubApp {
         `;
         this.messagesContainer.appendChild(infoTable);
 
-        // Timeline section
-        const timeline = document.createElement("div");
+        // FR-023/FR-024, AC-011: full case history in chronological order.
+        const e = (x) => this.escape(x);
+        const timeline = document.createElement("section");
         timeline.className = "case-timeline";
+        timeline.setAttribute("aria-label", "Ärendehistorik");
 
-        // Collect all events
-        const events = [];
+        const people = this.caseParticipants(caseObj)
+            .map(p => `${p.type === "bot" ? "🤖" : "👤"} ${e(p.name)}${p.role ? ` (${e(p.role)})` : ""}`).join(", ");
+        const events = this.buildHistory(caseObj);
 
-        caseObj.decisions.forEach(d => {
-            events.push({
-                type: "decision",
-                timestamp: d.timestamp,
-                icon: "💡",
-                title: "BESLUT",
-                actor: d.maker,
-                description: d.text
-            });
-        });
-
-        caseObj.delegations.forEach(d => {
-            events.push({
-                type: "delegation",
-                timestamp: d.timestamp,
-                icon: "📋",
-                title: "DELEGERING",
-                actor: `${d.from} → ${d.to}`,
-                description: d.task,
-                status: d.status
-            });
-        });
-
-        caseObj.actions.forEach(a => {
-            events.push({
-                type: "action",
-                timestamp: a.timestamp,
-                icon: "✓",
-                title: "ÅTGÄRD",
-                actor: a.performer,
-                description: a.text,
-                status: a.status
-            });
-        });
-
-        // Sort events by timestamp
-        events.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-        if (events.length === 0) {
-            const emptyMsg = document.createElement("div");
-            emptyMsg.style.cssText = "padding: 2rem; text-align: center; color: #999;";
-            emptyMsg.innerHTML = "<em>Ingen aktivitet än på detta ärende</em>";
-            timeline.appendChild(emptyMsg);
-        } else {
-            const timelineTitle = document.createElement("h3");
-            timelineTitle.style.cssText = "margin-top: 1.5rem; margin-bottom: 1rem; color: #333;";
-            timelineTitle.textContent = "Tidslinje & Aktivitet";
-            timeline.appendChild(timelineTitle);
-
-            events.forEach((event, idx) => {
-                const eventEl = document.createElement("div");
-                eventEl.className = `timeline-event event-${event.type}`;
-                eventEl.innerHTML = `
-                    <div class="timeline-dot">${event.icon}</div>
+        timeline.innerHTML = `
+            <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: #333;">Historik</h3>
+            <p class="case-participants"><strong>Deltagare:</strong> ${people}</p>
+            <ol class="case-history" aria-label="Händelser i kronologisk ordning">
+                ${events.map(ev => `
+                <li class="timeline-event">
+                    <div class="timeline-dot" aria-hidden="true">${ev.icon}</div>
                     <div class="timeline-content">
                         <div class="event-header">
-                            <span class="event-type">${event.title}</span>
-                            <span class="event-actor">${this.escape(event.actor)}</span>
-                            ${event.status ? `<span class="event-status">${this.escape(event.status)}</span>` : ""}
-                            <span class="event-time">${new Date(event.timestamp).toLocaleTimeString("sv-SE")}</span>
+                            <span class="event-type">${e(ev.type)}</span>
+                            <span class="event-actor">${e(ev.actor)}</span>
+                            <time class="event-time" datetime="${new Date(ev.at).toISOString()}">${new Date(ev.at).toLocaleString("sv-SE")}</time>
                         </div>
-                        <div class="event-description">${this.escape(event.description)}</div>
+                        <div class="event-description">${e(ev.detail)}</div>
                     </div>
-                </div>
-                ${idx < events.length - 1 ? '<div class="timeline-connector"></div>' : ""}
-                `;
-                timeline.appendChild(eventEl);
-            });
-        }
+                </li>`).join("")}
+            </ol>`;
 
         this.messagesContainer.appendChild(timeline);
         this.messagesContainer.scrollTop = 0;
