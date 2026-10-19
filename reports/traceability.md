@@ -15,7 +15,7 @@ Spårning PRD-ID → feature → implementation → test → resultat. Resultat 
 | FR-008–FR-012 | Larmdetaljer, kvittering, eskalering | FEAT-critical-alert | banner, `alarms`, RPC `acknowledge_alarm` | AC-003 | ✅ |
 | FR-013 | Insyn för Maskinansvarig | FEAT-mentions | `@` → `invited_ids`; historikens deltagare | TEST-005, AC-004 | ✅ |
 | FR-014–FR-015 | Följdfrågor, data/tolkning/rekommendation | FEAT-actions / bot | `generateBotResponse` (mall); Edge Function `bot-reply` (LLM) | AC-005 | ⚠️ mall ✅, LLM [TBD] |
-| FR-016–FR-020 | Beslut, delegering, åtgärd med metadata | FEAT-actions | `case_events`, `handleSave*` | TEST-003, AC-006–AC-008 | ✅ beslut; delegering/åtgärd ⚠️ |
+| FR-016–FR-020 | Beslut, delegering, åtgärd med metadata | FEAT-actions | `case_events`, `handleSave*` | TEST-003, AC-006–AC-008 | ✅ |
 | FR-021 | @ kopplar in kollegor/botar | FEAT-mentions | `src/composer.js`, `api.invite` | TEST-004, AC-009 | ✅ |
 | FR-022 | / infogar ärenden/parametrar/kontext | FEAT-mentions | `src/composer.js` `referenceCandidates` | TEST-004, AC-010 | ✅ |
 | FR-023–FR-024 | Historik, kronologisk, aktör tydlig | FEAT-history | `buildHistory`/`renderHistory` | TEST-001, AC-011 | ✅ |
@@ -26,7 +26,7 @@ Spårning PRD-ID → feature → implementation → test → resultat. Resultat 
 
 | ID | Implementation | Test | Resultat |
 |----|----------------|------|----------|
-| NFR-001 | CSS media queries | TEST-007, AC-014 | ⚠️ 1920 px + 375 px ✅, 768 px [TBD] |
+| NFR-001 | CSS media queries | TEST-007, AC-014 | ✅ automatiskt (1920/375 px) + manuellt bekräftat |
 | NFR-002–NFR-004 | ARIA (combobox/listbox, historik `aside`/`ol`), text + ikon | TEST-008 | ⚠️ automatiserad DOM-kontroll; skärmläsare [TBD] |
 | SEC-001 | Ingen styrkanal; `guard.ts` | TEST-009, llm-safety-01 | ⚠️ guard i Node ✅, LLM [TBD] |
 | SEC-002–SEC-003 | Beslutsstödsrubrik + säkerhetsfot | TEST-009 | ✅ UI |
