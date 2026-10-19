@@ -442,7 +442,7 @@ class AIHubApp {
             const e = (s) => this.escape(s);
             const md = msg.metadata || {};
             if (msg.type === "alarm") {
-                content += `<strong>🚨 KRITISKT LARM</strong><br><pre style="white-space: pre-wrap; font-family: monospace; font-size: 12px; background: #fff3cd; padding: 8px; border-radius: 4px; margin: 8px 0;">${e(msg.text)}</pre>`;
+                content += `<strong>🚨 KRITISK ESKALERING – HPM-2400</strong><br><pre style="white-space: pre-wrap; font-family: monospace; font-size: 12px; background: #fff3cd; padding: 8px; border-radius: 4px; margin: 8px 0;">${e(msg.text)}</pre>`;
                 if (md.escalatedBecause) {
                     content += `<small style="color: #d42426;"><strong>Eskalerad:</strong> ${e(md.escalatedFromRole)} → ${e(md.escalatedToRole)} (${e(md.escalatedBecause)})</small>`;
                 }
