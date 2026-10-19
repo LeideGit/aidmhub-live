@@ -24,7 +24,7 @@ Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronolo
 
 ## 4. Fält → källa
 
-| FR-023-fält | Händelsetyp i panelen | Källa |
+| FR-023-fält | Händelsetyp i ärendevyn | Källa |
 |---|---|---|
 | Ärende | Ärendehuvud + "Ärende skapat" | `cases` |
 | Ursprungligt maskinlarm | "Ursprungligt maskinlarm" (+ "Eskalering") | `alarms` |
@@ -43,7 +43,7 @@ Visa hela kedjan från ursprungligt maskinlarm till mänsklig åtgärd i kronolo
 - Händelser med samma tidsstämpel ordnas larm → eskalering → ärende skapat.
 
 ## 6. Kantfall
-- Konversation utan ärende: förklarande text i stället för tom lista.
+- Ärende utan larm eller konversation: visar "Ärende skapat" och eventuella beslut, delegeringar och åtgärder.
 - Avslutade äldre ärenden (CASE-001/002): visar ärendeskapande och eventuella events.
 
 ## 7. Test
