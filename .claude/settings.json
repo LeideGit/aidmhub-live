@@ -1,0 +1,56 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "AI DM HUB",
+    "description": "Meddelandehub för människor och maskinbotar – lokal HTML-prototyp"
+  },
+  "permissions": {
+    "bash": {
+      "allow": [
+        "find",
+        "ls",
+        "cat",
+        "grep",
+        "mkdir",
+        "rm",
+        "cp",
+        "mv",
+        "touch",
+        "echo",
+        "chmod",
+        "npm",
+        "node",
+        "python3"
+      ],
+      "deny": []
+    },
+    "network": false,
+    "allowExternalIntegrations": false,
+    "productionAccess": false
+  },
+  "rules": {
+    "development": ".claude/rules/development.md",
+    "testing": ".claude/rules/testing.md",
+    "specifications": ".claude/rules/specifications.md"
+  },
+  "agents": {
+    "evaluator": ".claude/agents/evaluator.md"
+  },
+  "mockData": {
+    "enabled": true,
+    "description": "All data is fictional and local"
+  },
+  "localBuild": {
+    "framework": "vanilla",
+    "description": "Vanilla HTML/CSS/JavaScript – no external dependencies required"
+  },
+  "security": {
+    "noMachineCommands": true,
+    "noProductionIntegration": true,
+    "noRealAuth": true,
+    "allDataFictitious": true,
+    "noMCP": true,
+    "noRAG": true,
+    "comment": "Prototypen är beslutsstöd. Aldrig maskinstyrning eller ersättning av befintliga säkerhetssystem."
+  }
+}

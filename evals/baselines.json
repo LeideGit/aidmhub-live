@@ -1,0 +1,112 @@
+{
+  "version": "1.0",
+  "generated": "2024-10-14",
+  "baselines": [
+    {
+      "testId": "TEST-001",
+      "testName": "End-to-end demo från 10-sekunderslarmet till historik",
+      "status": "not_measured",
+      "reason": "Implementation pending. Placeholder för när demo-flow körs.",
+      "expectedResult": "Flödet genomförs från start till slut utan fel",
+      "acceptanceCriteria": "AC-001–AC-011",
+      "owner": "[TBD]",
+      "nextStep": "Implementera FEAT-critical-alert och FEAT-conversation i Fas 2, sedan köra TEST-001"
+    },
+    {
+      "testId": "TEST-002",
+      "testName": "Sortering och märkning av det kritiska larmet i DM-listan",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på FEAT-critical-alert och FEAT-DM-list.",
+      "expectedResult": "Larmet visas högst upp med röd märkning, text och ikon",
+      "acceptanceCriteria": "AC-002, AC-012",
+      "owner": "[TBD]",
+      "nextStep": "Implementera FEAT-DM-list och FEAT-critical-alert i Fas 1–2, sedan köra TEST-002"
+    },
+    {
+      "testId": "TEST-003",
+      "testName": "Verifiera beslut, delegering och åtgärd inklusive obligatoriska fält",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på FEAT-actions.",
+      "expectedResult": "Alla tre actions sparas med korrekta fält och tidsstämplar",
+      "acceptanceCriteria": "AC-006, AC-007, AC-008",
+      "owner": "[TBD]",
+      "nextStep": "Implementera FEAT-actions i Fas 3, sedan köra TEST-003"
+    },
+    {
+      "testId": "TEST-004",
+      "testName": "Verifiera @-sökning för människor/botar och /-sökning för ärenden/parametrar",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på FEAT-mentions och FEAT-slashcommands.",
+      "expectedResult": "Båda sökfunktioner returnerar rätta resultat och infogning fungerar",
+      "acceptanceCriteria": "AC-009, AC-010",
+      "owner": "[TBD]",
+      "nextStep": "Implementera FEAT-mentions och FEAT-slashcommands i Fas 3, sedan köra TEST-004"
+    },
+    {
+      "testId": "TEST-005",
+      "testName": "Verifiera att Maskinansvarig kan delta efter eskalering",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på FEAT-critical-alert och FEAT-mentions.",
+      "expectedResult": "Maskinansvarig är synlig i konversationen eller kan kopplas in via @",
+      "acceptanceCriteria": "AC-004",
+      "owner": "[TBD]",
+      "nextStep": "Verifiera i TEST-001 eller TEST-004 när larmet eskaleras"
+    },
+    {
+      "testId": "TEST-006",
+      "testName": "Verifiera återställning och upprepad körning",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på FEAT-demo-reset.",
+      "expectedResult": "Scenario kan återställas och 10-sekundersflödet körs igen",
+      "acceptanceCriteria": "AC-013",
+      "owner": "[TBD]",
+      "nextStep": "Implementera FEAT-demo-reset i Fas 5, sedan köra TEST-006"
+    },
+    {
+      "testId": "TEST-007",
+      "testName": "Responsiv kontroll på desktop (1920px), tablet (768px), mobil (375px)",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på FEAT-responsive.",
+      "expectedResult": "Kärnflödet fungerar på alla tre skärmstorlekar utan horisontell scrollning",
+      "acceptanceCriteria": "AC-014, NFR-001",
+      "owner": "[TBD]",
+      "nextStep": "Implementera responsiv design i Fas 1, sedan köra TEST-007"
+    },
+    {
+      "testId": "TEST-008",
+      "testName": "Grundläggande tillgänglighet: tangentbord, fokus, semantik, etiketter",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på alla FEATs och FEAT-accessibility.",
+      "expectedResult": "Tangentbord-navigering, synligt fokus, ARIA-labels fungerar",
+      "acceptanceCriteria": "AC-014, NFR-002, NFR-003, NFR-004",
+      "owner": "[TBD]",
+      "nextStep": "Implementera FEAT-accessibility iterativt, sedan köra TEST-008 i Fas 5"
+    },
+    {
+      "testId": "TEST-009",
+      "testName": "Negativ säkerhetskontroll: ingen maskinstyrning",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på alla FEATs.",
+      "expectedResult": "Ingen UI-action skickar styrkommandon eller antyder maskinkontroll",
+      "acceptanceCriteria": "AC-015, SEC-001, SEC-002",
+      "owner": "[TBD]",
+      "nextStep": "Köra säkerhetskontroll i Fas 5, verifiera att ingen action är bindande"
+    },
+    {
+      "testId": "TEST-010",
+      "testName": "Datakontroll: samtliga namn, maskiner, larm och historikposter är fiktiva",
+      "status": "not_measured",
+      "reason": "Implementation pending. Väntar på mockdata-godkännande.",
+      "expectedResult": "All visad data är mockad, inte verklig produktionsdata",
+      "acceptanceCriteria": "AC-015, SEC-004",
+      "owner": "[TBD]",
+      "nextStep": "Köra datakontroll när mockdata är fastställd, verifiera att all data är fiktiv"
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "measured": 0,
+    "notMeasured": 10,
+    "notes": "Alla tester är i \"not_measured\" status eftersom implementationen är pending. Denna baseline uppdateras när varje test körs."
+  }
+}

@@ -1,0 +1,23 @@
+id: persistence-01
+title: "Persistens och sessionsisolering"
+description: "Verifiera att scenariot sparas i Supabase, överlever omladdning och är isolerat per webbläsarsession (ADR-001)"
+prio: P1
+relatedAC:
+  - AC-013
+relatedFR:
+  - FR-004
+  - FR-027
+relatedTEST:
+  - TEST-001
+  - TEST-006
+steps:
+  - "Öppna src/index.html; verifiera badge '● Ansluten – sparas'"
+  - "Vänta på 10-sekunderslarmet; ladda om sidan efter 5 sekunder"
+  - "Verifiera att larmet finns kvar högst upp, inte dupliceras, och nedräkningen fortsätter från kvarvarande tid"
+  - "Ställ en fråga till HPM-2400-boten; ladda om; verifiera att fråga och svar finns kvar"
+  - "Skapa Beslut, Delegering (till Lars) och Åtgärd; ladda om; verifiera tidslinjen under Ärenden i kronologisk ordning med aktörer"
+  - "Öppna samma URL i ett privat fönster; verifiera att det andra fönstret har ett eget, orört scenario"
+  - "Klicka Återställ Demo; verifiera att endast CASE-001/CASE-002 finns och inga användarmeddelanden kvarstår"
+  - "Negativ: anropa REST-API:t med anon-nyckeln utan session (curl) mot /rest/v1/messages; verifiera tomt svar/401"
+expectedResult: "Allt tillstånd persisteras per session, återställning är fullständig, ingen åtkomst över sessionsgränser"
+grader: "functionality"

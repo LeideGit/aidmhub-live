@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI DM HUB – Meddelandehub för maskinpark</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-branding">
+                <div class="logo">🏭</div>
+                <div class="header-text">
+                    <h1>AI DM HUB</h1>
+                    <p class="subtitle">Maskinpark Meddelandehub</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator online" title="System aktiv"></span>
+                <span class="status-text">System: Aktiv</span>
+                <span id="modeBadge" class="status-text" style="margin-left: 0.75rem;" aria-live="polite">Ansluter…</span>
+            </div>
+            <div class="header-controls">
+                <a href="guide.html" class="control-btn" title="Läs guiden" style="text-decoration: none; display: flex; align-items: center;">
+                    📖 Guide
+                </a>
+                <button id="resetBtn" class="control-btn reset-btn" title="Återställ demonstrationsscenario">
+                    ↻ Återställ Demo
+                </button>
+                <button id="settingsBtn" class="control-btn" title="Inställningar">
+                    ⚙️ Inställningar
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-navigation">
+            <button id="tabMessages" class="tab-btn active" data-tab="messages">💬 Meddelanden</button>
+            <button id="tabCases" class="tab-btn" data-tab="cases">📋 Ärenden</button>
+        </nav>
+
+        <!-- Main Layout -->
+        <div class="layout">
+            <!-- DM List (Left Panel) - Messages Tab -->
+            <aside id="messagesPanel" class="dm-list-panel tab-content active">
+                <div class="dm-list-header">
+                    <h2>Meddelanden</h2>
+                </div>
+                <ul id="dmList" class="dm-list" role="list">
+                    <!-- Populated by app.js -->
+                </ul>
+            </aside>
+
+            <!-- Cases List (Left Panel) - Cases Tab -->
+            <aside id="casesPanel" class="dm-list-panel tab-content">
+                <div class="dm-list-header">
+                    <h2>Ärenden</h2>
+                </div>
+                <ul id="casesList" class="dm-list" role="list">
+                    <!-- Populated by app.js -->
+                </ul>
+            </aside>
+
+            <!-- Conversation Panel (Right Panel) -->
+            <main class="conversation-panel">
+                <div id="noSelection" class="no-selection">
+                    <p>Välj en konversation för att börja</p>
+                    <p class="hint">Vänta 10 sekunder → kritiskt larm utlöses automatiskt</p>
+                </div>
+
+                <div id="conversationView" class="conversation-view" style="display: none;">
+                    <!-- Alarm Header (if applicable) -->
+                    <div id="alarmBanner" class="alarm-banner" style="display: none;" role="alert">
+                        <div class="alarm-content">
+                            <span class="alarm-icon">⚠️</span>
+                            <div class="alarm-text">
+                                <h3 id="alarmTitle">Kritisk Eskalering</h3>
+                                <p id="alarmMachine">Maskin: HPM-2400</p>
+                                <p id="alarmReason">Anledning: Utebliven kvittering från Maskinansvarig</p>
+                            </div>
+                        </div>
+                        <button id="ackBtn" class="ack-btn" title="Kvittera larmet">Kvittera</button>
+                    </div>
+
+                    <!-- Conversation Header -->
+                    <div class="conversation-header">
+                        <div id="conversationTitle" class="conversation-title">
+                            <!-- Populated by app.js -->
+                        </div>
+                    </div>
+
+                    <!-- Messages/History -->
+                    <div id="messagesContainer" class="messages-container">
+                        <!-- Populated by app.js -->
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button id="decisionBtn" class="action-btn decision-btn" title="Registrera beslut">
+                            💡 Beslut
+                        </button>
+                        <button id="delegationBtn" class="action-btn delegation-btn" title="Delegera uppgift">
+                            📋 Delegering
+                        </button>
+                        <button id="actionBtn" class="action-btn action-btn-submit" title="Registrera åtgärd">
+                            ✓ Åtgärd
+                        </button>
+                    </div>
+
+                    <!-- Input Field -->
+                    <div class="input-area">
+                        <input
+                            type="text"
+                            id="messageInput"
+                            class="message-input"
+                            placeholder="Ställ en fråga eller skriv ett meddelande (starta med @ eller / för sökning)..."
+                            aria-label="Meddelandeinmatning"
+                        >
+                        <button id="sendBtn" class="send-btn" title="Skicka meddelande">Skicka</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- History Panel (Bottom, toggleable on mobile) -->
+        <aside id="historyPanel" class="history-panel" style="display: none;">
+            <div class="history-header">
+                <h3>Historik</h3>
+                <button id="closeHistoryBtn" class="close-btn" aria-label="Stäng historik">×</button>
+            </div>
+            <div id="historyContent" class="history-content">
+                <!-- Populated by app.js -->
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modals -->
+    <!-- Decision Modal -->
+    <div id="decisionModal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="decisionModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="decisionModalTitle">Registrera beslut</h3>
+                <button class="modal-close" data-modal="decisionModal" aria-label="Stäng">×</button>
+            </div>
+            <div class="modal-body">
+                <label for="decisionCase">Ärende (Case):</label>
+                <select id="decisionCase" class="modal-input" required>
+                    <option value="">-- Välj ärende --</option>
+                </select>
+
+                <label for="decisionText" style="margin-top: 1rem;">Beslutsbeskrivning:</label>
+                <textarea id="decisionText" class="modal-input" rows="4" placeholder="Skriv beslutet..." required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" data-modal="decisionModal">Avbryt</button>
+                <button id="savDecisionBtn" class="btn-save">Spara beslut</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delegation Modal -->
+    <div id="delegationModal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="delegationModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="delegationModalTitle">Delegera uppgift</h3>
+                <button class="modal-close" data-modal="delegationModal" aria-label="Stäng">×</button>
+            </div>
+            <div class="modal-body">
+                <label for="delegationCase">Ärende (Case):</label>
+                <select id="delegationCase" class="modal-input" required>
+                    <option value="">-- Välj ärende --</option>
+                </select>
+
+                <label for="delegationRecipient" style="margin-top: 1rem;">Till (person/bot):</label>
+                <input type="text" id="delegationRecipient" class="modal-input" placeholder="Börja skriva namn..." required>
+                <div id="delegationResults" class="search-results"></div>
+
+                <label for="delegationTask" style="margin-top: 1rem;">Uppgiftsbeskrivning:</label>
+                <textarea id="delegationTask" class="modal-input" rows="3" placeholder="Vad ska göras?" required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" data-modal="delegationModal">Avbryt</button>
+                <button id="savDelegationBtn" class="btn-save">Delegera</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Modal -->
+    <div id="actionModal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="actionModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="actionModalTitle">Registrera utförd åtgärd</h3>
+                <button class="modal-close" data-modal="actionModal" aria-label="Stäng">×</button>
+            </div>
+            <div class="modal-body">
+                <label for="actionCase">Ärende (Case):</label>
+                <select id="actionCase" class="modal-input" required>
+                    <option value="">-- Välj ärende --</option>
+                </select>
+
+                <label for="actionDescription" style="margin-top: 1rem;">Åtgärdsbeskrivning:</label>
+                <textarea id="actionDescription" class="modal-input" rows="4" placeholder="Vad gjordes?" required></textarea>
+
+                <label for="actionStatus" style="margin-top: 1rem;">Status:</label>
+                <select id="actionStatus" class="modal-input" required>
+                    <option value="started">Påbörjad</option>
+                    <option value="completed">Slutförd</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" data-modal="actionModal">Avbryt</button>
+                <button id="savActionBtn" class="btn-save">Spara åtgärd</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+    <script src="config.js"></script>
+    <script src="mockData.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

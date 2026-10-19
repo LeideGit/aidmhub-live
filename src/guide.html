@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI DM HUB – User Flow Guide</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #f6f8fa;
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .guide-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header.guide-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            margin: -2rem -1rem 3rem -1rem;
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        header.guide-header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+        }
+
+        header.guide-header p {
+            font-size: 1.1rem;
+            margin: 0;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-link:hover {
+            background-color: #0052a3;
+        }
+
+        section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--color-primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        section.critical {
+            border-left-color: var(--color-critical);
+        }
+
+        section.success {
+            border-left-color: var(--color-success);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 0;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: #1a1a2e;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h3:first-child {
+            margin-top: 0;
+        }
+
+        .flow-diagram {
+            background: #f6f8fa;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step-number {
+            background: var(--color-primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .flow-step.critical .flow-step-number {
+            background: var(--color-critical);
+        }
+
+        .flow-step.success .flow-step-number {
+            background: var(--color-success);
+        }
+
+        .flow-step-content {
+            flex: 1;
+        }
+
+        .flow-step-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 0.25rem;
+        }
+
+        .flow-step-description {
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 1rem;
+            border-left: 3px solid #ffc600;
+            border-radius: 2px;
+            margin: 1.5rem 0;
+        }
+
+        .principle {
+            background: #ecfdf5;
+            border-left: 3px solid var(--color-success);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 2px;
+        }
+
+        .principle strong {
+            color: #047857;
+        }
+
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--color-border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background-color: #f6f8fa;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f6f8fa;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, rgba(0,102,204,0.05) 0%, rgba(0,102,204,0.02) 100%);
+            border-left: 4px solid var(--color-primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 2px;
+        }
+
+        .key-concept strong {
+            color: var(--color-primary);
+        }
+
+        .action-box {
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .action-box.decision {
+            border-left: 4px solid #eab308;
+            background: #fffbeb;
+        }
+
+        .action-box.delegation {
+            border-left: 4px solid #a8a1f0;
+            background: #f3f0ff;
+        }
+
+        .action-box.action {
+            border-left: 4px solid #10b981;
+            background: #ecfdf5;
+        }
+
+        .action-box h4 {
+            margin-top: 0;
+        }
+
+        code {
+            background: #f6f8fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 2px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1rem 0;
+            border-left: 2px solid var(--color-border);
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 1.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px var(--color-primary);
+        }
+
+        .timeline-item.critical::before {
+            background: var(--color-critical);
+            box-shadow: 0 0 0 1px var(--color-critical);
+        }
+
+        .timeline-time {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.9rem;
+        }
+
+        .timeline-description {
+            color: var(--color-text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .icon-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .icon-row .icon {
+            font-size: 2rem;
+            width: 60px;
+            text-align: center;
+        }
+
+        .icon-row .text {
+            flex: 1;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin: 3rem -1rem -2rem -1rem;
+            font-size: 0.9rem;
+            border-top: 3px solid var(--color-primary);
+        }
+
+        @media (max-width: 768px) {
+            header.guide-header {
+                padding: 2rem 1rem;
+            }
+
+            header.guide-header h1 {
+                font-size: 1.8rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Tillbaka till AI DM HUB</a>
+
+    <div class="guide-container">
+        <header class="guide-header">
+            <h1>🏭 AI DM HUB – User Flow Guide</h1>
+            <p>Pedagogisk redogörelse av systemets syfte, flöde och designprincipler</p>
+        </header>
+
+        <!-- SYFTE OCH PROBLEM -->
+        <section>
+            <h2>🎯 Syftet med lösningen</h2>
+            <h3>Det Problem Vi Löser</h3>
+            <p>
+                I moderna industrianläggningar uppstår kritiska maskinalarm som kräver omedelbar uppmärksamhet och korrekt hantering.
+                Utan ett strukturerat system för <strong>eskalering, beslut och spårbarhet</strong> riskerar vi:
+            </p>
+            <ul>
+                <li><strong>Försenad respons</strong> — Larmet når inte rätt person i tid</li>
+                <li><strong>Oklar ansvarsfördelning</strong> — Vem ska göra vad?</li>
+                <li><strong>Saknad revidering</strong> — Vi vet inte vem som beslutade eller delegerade vad</li>
+                <li><strong>Upprepade misstag</strong> — Historiken är inte tillgänglig för framtida referens</li>
+            </ul>
+
+            <h3>Vår Lösning: AI DM HUB</h3>
+            <p>
+                AI DM HUB är en <strong>meddelandehub för beslutsstöd</strong> som:
+            </p>
+            <ul>
+                <li>✅ <strong>Eskalerar larmen automatiskt</strong> när ingen svarar i tid</li>
+                <li>✅ <strong>Strukturerar kommunikationen</strong> mellan människor och maskinbotar</li>
+                <li>✅ <strong>Dokumenterar beslut</strong> — vem gjorde vad och när</li>
+                <li>✅ <strong>Länkar allt till ärenden</strong> för komplett spårbarhet</li>
+                <li>✅ <strong>Involverar rätt människor</strong> genom @-omnämnanden och delegation</li>
+            </ul>
+
+            <div class="principle">
+                <strong>🔐 Säkerhetsprincip:</strong> AI DM HUB är ENDAST ett beslutstödssystem. Det styr aldrig maskiner direkt. Alla åtgärder fattas och utförs av människor.
+            </div>
+        </section>
+
+        <!-- SYSTEMÖVERSIKT -->
+        <section>
+            <h2>🏗️ Systemöversikten</h2>
+            <h3>Tre Huvudkomponenter</h3>
+
+            <div class="icon-row">
+                <div class="icon">📋</div>
+                <div class="text">
+                    <strong>Meddelandelistan (DM-lista)</strong><br>
+                    Visar alla konversationer: kollegor, maskinbotar, och ärenden. Kritiska larm syns högst upp.
+                </div>
+            </div>
+
+            <div class="icon-row">
+                <div class="icon">💬</div>
+                <div class="text">
+                    <strong>Konversationsvyn</strong><br>
+                    Två-vägs dialog mellan operatörer och maskinbotar. Botar ger data, tolkning och rekommendation.
+                </div>
+            </div>
+
+            <div class="icon-row">
+                <div class="icon">📊</div>
+                <div class="text">
+                    <strong>Åtgärd & Historik</strong><br>
+                    Registrera Beslut, Delegering och Åtgärd. Allt länkas till ett ärende för full spårning.
+                </div>
+            </div>
+        </section>
+
+        <!-- GENOMGÅNG AV DEMO -->
+        <section>
+            <h2>🎬 Genomgång av Demot</h2>
+            <h3>Steg-för-steg: Vad Händer när Du Startar</h3>
+
+            <div class="flow-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">⏰ Systemet Startar — Vänta 10 Sekunder</div>
+                    <div class="flow-step-description">
+                        Du ser DM-listan med kollegor och botar. Systemet räknar ned — efter 10 sekunder utlöses ett kritiskt larm.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step critical">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">⚠️ KRITISK ESKALERING — Larmet Dyker Upp</div>
+                    <div class="flow-step-description">
+                        Efter exakt 10 sekunder: ett kritiskt larm från HPM-2400 dyker upp röd högst upp i DM-listan.
+                        Konversationen öppnas automatiskt. Du ser "⚠️ KRITISK ESKALERING" från maskinboten med [DATA], [TOLKNING] och [REKOMMENDATION].
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step critical">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">✓ Kvittera Larmet — Nedräkning: 30 Sekunder</div>
+                    <div class="flow-step-description">
+                        Klicka knappen "Kvittera" i larmbannern. <strong>En 30-sekunders nedräkning startar</strong> och visas tydligt.
+                        Om du inte delegerar eller fattar ett beslut innan tiden är slut, eskaleras larmet ännu högre i organisationen.
+                        Nedräkningen skapar urgency och visar systemets eskalerings-logik.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">💬 Fråga Boten i Chatten</div>
+                    <div class="flow-step-description">
+                        I meddelandefältet längst ner skriver du en fråga, t.ex. "Vad är temperaturnivån nu?" eller "Vad orsakar larmet?".
+                        Boten svarar med mer detaljer: vilken sensor, vilket värde, vad som är normalt, och en rekommendation.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">📋 Delegera till Anna</div>
+                    <div class="flow-step-description">
+                        Klicka knappen "📋 Delegering". I modalen: välj ett ärende, skriv uppgiften (t.ex. "Inspektera kylsystemet"),
+                        och välj Anna Bergström som mottagare. Klicka "Delegera". Anna får omedelbar notifiering.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">🤝 Be Lars Hjälpa Anna</div>
+                    <div class="flow-step-description">
+                        Klicka "📋 Delegering" igen. Välj samma ärende, skapa en ny delegering: "Hjälp Anna med kylsysteminspektionen",
+                        och välj Lars Nyström som mottagare. Efter ~5 sekunder får du en DM från Lars som bekräftar uppgiften.
+                        Efter ~10 sekunder rapporterar han att arbetet börjat.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step success">
+                <div class="flow-step-number">7</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">📂 Se Ärendehanteringen</div>
+                    <div class="flow-step-description">
+                        Klicka på fliken "📋 Ärenden" högst upp. Du ser ärendet (CASE-XXX) med all kronologisk historia:
+                        originallarmet, dina delegeringar, Annas och Lars' åtgärder, tidsstämplar — allt länkat och spårbart.
+                        Det är det kompletta audit trail av incidenten.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLOWET: 10-SEKUNDERS LARMET -->
+        <section class="critical">
+            <h2>⚠️ Flowet: Det 10-Sekunders Larmet</h2>
+            <p>
+                Själva hjärtat i AI DM HUB är den automatiska eskalering som sker när en maskinansvarig inte svarar på ett kritiskt larm inom 30 sekunder.
+                Efter ytterligare 10 sekunder (40 sek totalt) visas larmet med tydlig märkning.
+            </p>
+
+            <h3>Steg-för-steg Flöde</h3>
+
+            <div class="flow-step critical">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">⚙️ Larm uppstår från maskin</div>
+                    <div class="flow-step-description">
+                        En sensor på HPM-2400 detekterar temperaturöverkridning (127°C, normal: 85°C).
+                        Systemet skapar ett ärende: <code>CASE-001</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">📤 Larmet skickas till Maskinansvarig</div>
+                    <div class="flow-step-description">
+                        Anna Bergström (Maskinansvarig) får larmet i sin DM-lista.
+                        Systemet förväntar sig ett svar inom 30 sekunder.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step critical">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">🔔 Timeout — Eskalering</div>
+                    <div class="flow-step-description">
+                        Anna svarade inte. Efter 40 sekunder eskaleras larmet automatiskt till Erik Svensson
+                        (Maskingruppsansvarig, högre nivå). Larmet märks <strong style="color: #d42426;">KRITISK ESKALERING</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                    <div class="flow-step-title">👁️ Erik ser larmet</div>
+                    <div class="flow-step-description">
+                        Larmet visas högst upp i Eriks DM-lista med röd bakgrund och ⚠️ icon.
+                        Samtidigt öppnas konversationen automatiskt så Erik ser ursprungligt larm + eskaleringsorsak.
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>🎯 Designprincip:</strong> Eskalering är <strong>automatisk och omedelbar</strong>.
+                Det finns ingen kö, ingen manual steg, ingen chans att missa. När timeout inträffar, går larmet
+                direkt till nästa beslutsfattare.
+            </div>
+        </section>
+
+        <!-- ÅTGÄRDERNA: BESLUT, DELEGERING, ÅTGÄRD -->
+        <section>
+            <h2>🎬 Åtgärderna: Beslut, Delegering, Åtgärd</h2>
+            <p>
+                När en operatör mottar larmet kan de registrera tre typer av åtgärder.
+                <strong>Varje åtgärd länkas till ett ärende för komplett spårbarhet.</strong>
+            </p>
+
+            <div class="action-box decision">
+                <h4>💡 BESLUT</h4>
+                <p><strong>Vad:</strong> Operatören fattar ett beslut om vad som ska göras.</p>
+                <p><strong>Exempel:</strong> "Vi stänger av HPM-2400 temporärt och inspekterar kylsystemet."</p>
+                <p><strong>Sparas som:</strong> Beslutsfattare (Erik) → Beslutstext → Tidsstämpel → <strong>Ärende (CASE-001)</strong></p>
+                <p><strong>Synlighet:</strong> Visas i konversationen under "💡 BESLUT" samt i ärendehistoriken.</p>
+            </div>
+
+            <div class="action-box delegation">
+                <h4>📋 DELEGERING</h4>
+                <p><strong>Vad:</strong> Operatören delegerar ett arbetsuppgift till någon annan (kollega eller tekniker).</p>
+                <p><strong>Exempel:</strong> Erik delegerar till Lars: "Inspektera kylvätskans nivå och byt om nödvändigt."</p>
+                <p><strong>Sparas som:</strong> Delegatör (Erik) → Mottagare (Lars) → Uppgiftsbeskrivning → <strong>Ärende (CASE-001)</strong></p>
+                <p><strong>Effekt:</strong> Lars får en DM med delegeringen och kan svara med uppdateringar.</p>
+            </div>
+
+            <div class="action-box action">
+                <h4>✓ ÅTGÄRD</h4>
+                <p><strong>Vad:</strong> Operatören registrerar en faktisk åtgärd som har vidtagits.</p>
+                <p><strong>Exempel:</strong> Lars registrerar: "Bytte kylvätska. Systemet är igång igen." (Status: Slutförd)</p>
+                <p><strong>Sparas som:</strong> Utförare (Lars) → Åtgärdsbeskrivning → Status → Tidsstämpel → <strong>Ärende (CASE-001)</strong></p>
+                <p><strong>Synlighet:</strong> Visar exakt vilken åtgärd som gjordes, av vem, och när.</p>
+            </div>
+
+            <div class="key-concept">
+                <strong>🔗 Ärendelänkning:</strong> Varje åtgärd (Beslut/Delegering/Åtgärd) MÅSTE länkas till ett ärende.
+                Det finns ingen "lös" åtgärd. Detta säkerställer att vi alltid vet vilket incident varje åtgärd relaterar till.
+            </div>
+        </section>
+
+        <!-- ÄRENDEHANTERING -->
+        <section>
+            <h2>📂 Ärendehantering</h2>
+            <h3>Vad är ett "Ärende"?</h3>
+            <p>
+                Ett <strong>ärende</strong> (case) är en arbetsuppgift knuten till en specifik incident eller larm.
+                Det har ett unikt ID (t.ex. <code>CASE-001</code>), en beskrivning, status, och en kronologisk historik
+                av alla beslut och åtgärder som relaterar till det.
+            </p>
+
+            <h3>Ärende Livscykel</h3>
+            <div class="timeline">
+                <div class="timeline-item critical">
+                    <div class="timeline-time">T+0s: Larm Uppstår</div>
+                    <div class="timeline-description">Maskin detekterar problem. Systemet skapar <code>CASE-001</code> med status "open".</div>
+                </div>
+
+                <div class="timeline-item critical">
+                    <div class="timeline-time">T+40s: Eskalering</div>
+                    <div class="timeline-description">Larmet eskaleras till nästa nivå. Ärendet är fortfarande "open".</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">T+1m: Beslut Registrerat</div>
+                    <div class="timeline-description">Erik fattar ett beslut. Det länkas till <code>CASE-001</code>.</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">T+2m: Delegering</div>
+                    <div class="timeline-description">Erik delegerar till Lars. Delegeringen länkas till <code>CASE-001</code>.</div>
+                </div>
+
+                <div class="timeline-item success">
+                    <div class="timeline-time">T+5m: Åtgärd Slutförd</div>
+                    <div class="timeline-description">Lars registrerar åtgärden. Status: "Slutförd". Länkat till <code>CASE-001</code>.</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">T+10m: Ärendet Stängt</div>
+                    <div class="timeline-description">Ärendet status ändras till "closed". Historiken är komplett och spårbar.</div>
+                </div>
+            </div>
+
+            <h3>Ärendelistan</h3>
+            <p>
+                Under fliken "Ärenden" kan operatörer se alla ärenden (öppna och stängda) tillsammans med
+                alla beslut och åtgärder som länkas till dem. Detta ger en helhetsbild av problemet och lösningen.
+            </p>
+        </section>
+
+        <!-- SPÅRBARHET OCH SÄKERHET -->
+        <section class="success">
+            <h2>🔐 Spårbarhet & Säkerhet</h2>
+            <h3>Audit Trail</h3>
+            <p>
+                AI DM HUB skapar ett fullständigt audit trail för varje incident:
+            </p>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Vem</th>
+                    <th>Gjorde Vad</th>
+                    <th>Vilket Ärende</th>
+                    <th>Tidsstämpel</th>
+                </tr>
+                <tr>
+                    <td>Erik Svensson</td>
+                    <td>Fattat Beslut: "Stäng av systemet"</td>
+                    <td>CASE-001</td>
+                    <td>14:32:17</td>
+                </tr>
+                <tr>
+                    <td>Erik Svensson</td>
+                    <td>Delegerat till Lars: "Inspektera kylsystemet"</td>
+                    <td>CASE-001</td>
+                    <td>14:33:02</td>
+                </tr>
+                <tr>
+                    <td>Lars Nyström</td>
+                    <td>Registrerat Åtgärd: "Bytte kylvätska"</td>
+                    <td>CASE-001</td>
+                    <td>14:38:45</td>
+                </tr>
+            </table>
+
+            <h3>Säkerhetsprinciper</h3>
+            <div class="principle">
+                <strong>🔒 Ingen Maskinstyrning:</strong> AI DM HUB är ALDRIG kopplat till maskinernas styrsystem.
+                Det är ett rekommendera- och dokumentationssystem. Alla faktiska styrkommandon går genom separata,
+                välsäkrade system.
+            </div>
+
+            <div class="principle">
+                <strong>📊 Mänsklig Ansvarstagande:</strong> Varje beslut och åtgärd är kopplad till en specifik person.
+                Systemet gör aldrig något automatiskt utan mänsklig initiering.
+            </div>
+
+            <div class="principle">
+                <strong>📝 Komplett Historik:</strong> Ingenting kan raderas eller ändras. Varje åtgärd är sparad med
+                aktör, tidsstämpel och ärende-ID. En helt transparent historik.
+            </div>
+        </section>
+
+        <!-- BOT-INTEGRATION -->
+        <section>
+            <h2>🤖 Bot-Integration & Beslutsstöd</h2>
+            <h3>Maskinbotar</h3>
+            <p>
+                Systemet integreras med <strong>maskinbotar</strong> som kan ge rekommendationer baserade på
+                sensordata. En bot (t.ex. "HPM-2400 Sensor Bot") kan:
+            </p>
+            <ul>
+                <li>📊 <strong>Presentera data</strong> — "Temperaturen är 127°C (normal: 85°C)"</li>
+                <li>🧠 <strong>Tolka datan</strong> — "Avvikelsen är +42°C, vilket tyder på ett kylfel"</li>
+                <li>💡 <strong>Rekommendera åtgärd</strong> — "Rekommendation: Inspektera kylsystemet och byt vätska om nödvändigt"</li>
+            </ul>
+
+            <div class="key-concept">
+                <strong>🎯 Beslutstöd, Inte Automatisering:</strong> Botsvar är märkta som "REKOMMENDATION".
+                Operatören läser det, överväger andra faktorer (säkerhet, produktion, personal), och fattar ett
+                MÄNSKLIGT beslut baserat på denna information.
+            </div>
+
+            <h3>Två-vägs Dialog</h3>
+            <p>
+                Operatören kan ställa följdfrågor till boten:
+            </p>
+            <ul>
+                <li>Operatör: "Vad är normal drifttemperatur?"</li>
+                <li>Bot: "[DATA] Enligt specifikation: 85°C. [TOLKNING] Vi är 42°C över det. [REKOMMENDATION] Stäng av systemet för inspektionsmöjligheter."</li>
+            </ul>
+        </section>
+
+        <!-- @-OMNÄMNANDEN OCH / KOMMANDON -->
+        <section>
+            <h2>@ och / — Smarta Sökningar</h2>
+            <h3>@-Omnämnanden</h3>
+            <p>
+                I chatfältet kan operatören skriva <code>@</code> för att söka efter en person eller bot:
+            </p>
+            <ul>
+                <li>Skriv: <code>@Anna</code> → Systemet visar "Anna Bergström (Maskinansvarig)"</li>
+                <li>Effekt: Användaren kan @-omnämna Anna i en meddelande för att koppla in henne</li>
+            </ul>
+
+            <h3>/-Kommandon</h3>
+            <p>
+                Skriv <code>/</code> för att referera till ett ärende eller parameter:
+            </p>
+            <ul>
+                <li>Skriv: <code>/CASE-001</code> → Systemet visar ärendet</li>
+                <li>Effekt: Snabb länk till ärendedetaljer utan att lämna chatfönstret</li>
+            </ul>
+
+            <div class="key-concept">
+                <strong>⌨️ Keyboard-vänlig:</strong> @ och / är snabbkommandon för power-users.
+                Det gör kommunikationen snabbar och mer strukturerad.
+            </div>
+        </section>
+
+        <!-- RESPONSIVE DESIGN -->
+        <section>
+            <h2>📱 Responsiv Design — Desktop, Surfplatta, Mobil</h2>
+            <p>
+                Systemet fungerar på alla skärmstorlekar:
+            </p>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Enhet</th>
+                    <th>Layout</th>
+                    <th>Användningsfall</th>
+                </tr>
+                <tr>
+                    <td><strong>Desktop (1920px)</strong></td>
+                    <td>3-panel: DM-lista vänster, konversation höger, historik nere</td>
+                    <td>Kontrolcenter i kontrollrummet — full överblick</td>
+                </tr>
+                <tr>
+                    <td><strong>Surfplatta (768px)</strong></td>
+                    <td>Staplade paneler, DM-lista först</td>
+                    <td>Mobil inspektion på fabriksgolvet</td>
+                </tr>
+                <tr>
+                    <td><strong>Mobil (375px)</strong></td>
+                    <td>Enkolumns-stack, alla element fullbredd</td>
+                    <td>Snabba uppdateringar under rörelse</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- DESIGNPRINCIPER -->
+        <section>
+            <h2>✨ Designprinciper</h2>
+            <h3>Industriell Estetik</h3>
+            <div class="icon-row">
+                <div class="icon">🏭</div>
+                <div class="text">
+                    <strong>Factory-tema:</strong> Mörk header, blå accent (som industriell kontrollpanel).
+                    Skärmen känns som en verklig maskinövervakningsterminal.
+                </div>
+            </div>
+
+            <h3>Säkerhet i Design</h3>
+            <ul>
+                <li><strong>Ingen enbart färg-status:</strong> Kritiska larm märks med ⚠️ + "KRITISK ESKALERING" + röd färg. Aldrig bara färg.</li>
+                <li><strong>Synlig fokus:</strong> Tab-navigation är aldrig dold. Keyboard-användare ser alltid var de är.</li>
+                <li><strong>Semantisk HTML:</strong> Skärmläsare kan navigera systemet fullt ut.</li>
+            </ul>
+
+            <h3>Snabbhet & Klarhet</h3>
+            <ul>
+                <li><strong>Direkt feedback:</strong> När du sparar en åtgärd, ser du omedelbar bekräftelse.</li>
+                <li><strong>Ingen dold funktionalitet:</strong> Alla knappar och val är tydliga och märkta.</li>
+                <li><strong>Snabb eskalering:</strong> Larmet går till nästa person automatiskt — ingen manuell steg.</li>
+            </ul>
+        </section>
+
+        <!-- SAMMANFATTNING -->
+        <section>
+            <h2>📋 Sammanfattning</h2>
+            <h3>AI DM HUB i 30 sekunder</h3>
+            <ul>
+                <li>🎯 <strong>Syfte:</strong> Meddelandehub för beslutsstöd vid maskinalarm</li>
+                <li>⚠️ <strong>Eskalering:</strong> Larmen går automatiskt uppåt i organisationen om ingen svarar</li>
+                <li>💡 <strong>Åtgärder:</strong> Registrera Beslut, Delegering, Åtgärd — allt länkat till ett ärende</li>
+                <li>📊 <strong>Spårbarhet:</strong> Komplett historik — vem, vad, när, vilket ärende</li>
+                <li>🤖 <strong>Botar:</strong> Ger data + tolkning + rekommendation (aldrig styrkommandon)</li>
+                <li>🔐 <strong>Säkerhet:</strong> Mänsklig ansvarstagande, ingen maskinstyrning, transparent audit trail</li>
+                <li>📱 <strong>Tillgänglighet:</strong> Desktop, surfplatta, mobil — WCAG AA+</li>
+            </ul>
+
+            <div class="highlight">
+                <strong>🎯 Core Principle:</strong> AI DM HUB är en <strong>transparent, spårbar, mänsklig-driven</strong>
+                lösning för snabb respons och långsiktig revidering av industriella incident.
+            </div>
+        </section>
+
+        <!-- SÄKERHETSKOMPLETTERING -->
+        <section class="success">
+            <h2>🔐 En Notering om Säkerhet</h2>
+            <p>
+                <strong>Denna prototype ersätter aldrig verkliga nödstopp, säkerhetssystem eller automatisk maskinkontroll.</strong>
+            </p>
+            <p>
+                AI DM HUB är ett <strong>beslutstödssystem</strong> för att:
+            </p>
+            <ul>
+                <li>✅ Meddela människor snabbt om problem</li>
+                <li>✅ Strukturera kommunikation och beslutsfattande</li>
+                <li>✅ Dokumentera vad som gjordes och av vem</li>
+                <li>❌ INTE styra maskiner direkt</li>
+                <li>❌ INTE ersätta nödstopp eller säkerhetssystem</li>
+                <li>❌ INTE fatta autonoma beslut</li>
+            </ul>
+            <p>
+                För verklig deployment krävs säkerhetsgodkännande, redundans, och integration med etablerade kontrollsystem.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>🏭 <strong>AI DM HUB – Meddelandehub för Maskinpark</strong></p>
+        <p>Pedagogisk guide | Prototyp för demonstrationssyften | Alla data är fiktiva</p>
+        <p><a href="index.html" style="color: white; text-decoration: underline;">← Tillbaka till appen</a></p>
+    </footer>
+</body>
+</html>

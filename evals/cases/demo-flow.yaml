@@ -1,0 +1,72 @@
+id: demo-flow-01
+title: "End-to-end demo från start till historik"
+description: "Verifiera att hela flödet fungerar från prototypstart via 10-sekunderslarmet till full historik"
+priority: P0
+relatedAC:
+  - AC-001
+  - AC-002
+  - AC-003
+  - AC-005
+  - AC-006
+  - AC-007
+  - AC-008
+  - AC-011
+relatedTEST:
+  - TEST-001
+  - TEST-002
+  - TEST-003
+
+steps:
+  - action: "Öppna prototypen"
+    expectedResult: "DM-lista visas med kollegor och botar, ingen larmmärkning ännu"
+
+  - action: "Vänta 10 sekunder"
+    expectedResult: "Kritiskt larm för HPM-2400 uppstår automatiskt"
+
+  - action: "Verifiera att larmet är märkt: röd bakgrund, ⚠️-ikon, KRITISK ESCALERING-text"
+    expectedResult: "Märkningen är synlig och inte enbart färgbaserad"
+
+  - action: "Verifiera att larmet är högst upp i DM-listan"
+    expectedResult: "HPM-2400-konversationen är på position 1"
+
+  - action: "Klicka på larmet för att öppna konversationen"
+    expectedResult: "Larmdetaljer visas: ursprungligt larm, maskin, larmtyp, prioritet, tid, eskaleringsorsak"
+
+  - action: "Verifiera att Maskinansvarig är fortfarande synlig eller kan kopplas in via @"
+    expectedResult: "Maskinansvarig kan ses i konversationen eller hittas via @-sökning"
+
+  - action: "Ställ en följdfråga till boten (t.ex. 'Vad är den normala temperaturen?')"
+    expectedResult: "Bot svarar med data, tolkning och rekommendation (visuellt skild)"
+
+  - action: "Klicka på 'Beslut'-knappen"
+    expectedResult: "Modal öppnas för besluts-inmatning"
+
+  - action: "Skriv ett beslut (t.ex. 'Byt temperaturgivare omedelbar') och klicka Spara"
+    expectedResult: "Beslutshändelse sparas i konversationen med beslutsfattare och tidsstämpel"
+
+  - action: "Klicka på 'Delegering'-knappen"
+    expectedResult: "Modal öppnas med möjlighet att välja mottagare och skriva uppgift"
+
+  - action: "Välj en kolleg via @-sökning, skriv uppgift, klicka Spara"
+    expectedResult: "Delegeringshändelse sparas med parter, status och tidsstämpel"
+
+  - action: "Klicka på 'Åtgärd'-knappen"
+    expectedResult: "Modal öppnas för åtgärdsregistrering"
+
+  - action: "Skriv åtgärdsbeskrivning, välj status (Slutförd), klicka Spara"
+    expectedResult: "Åtgärdshändelse sparas med utförare, status och tidsstämpel"
+
+  - action: "Navigera till Historik-vyn"
+    expectedResult: "All Alla händelser visas kronologiskt: Ursprungligt larm → Eskalering → Botfråga → Svar → Beslut → Delegering → Åtgärd"
+
+  - action: "Verifiera spårbarhet: Varje händelse visar aktör, typ, tidsstämpel"
+    expectedResult: "Full spårbarhet från start till slut, alla aktörer identifierade"
+
+expectedResult: "Hele flödet genomförs utan fel, all spårbarhet är komplett, larmet är märkt och prioriterat"
+
+grader: "functionality"
+
+notes:
+  - "Detta är det primära demonstrationsflödet"
+  - "Målet är att visa full end-to-end-spårbarhet från maskinlarm till slutförd åtgärd"
+  - "Varje steg måste verifieras manuellt"
