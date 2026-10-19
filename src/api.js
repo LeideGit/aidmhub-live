@@ -192,7 +192,7 @@ const api = {
 
     // LLM reply via Edge Function. Returns false if unavailable so caller can use the offline template.
     async botReply(conversationId) {
-        if (!this.online) return false;
+        if (!this.online || !window.APP_CONFIG?.llmBot) return false;
         const { error } = await this.db.functions.invoke("bot-reply", { body: { conversationId } });
         if (error) {
             console.warn("bot-reply unavailable:", error.message);
