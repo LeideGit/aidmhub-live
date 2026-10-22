@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Planering – AI DM HUB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="planning.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-branding">
+            <div class="logo">🗂️</div>
+            <div class="header-text">
+                <h1>Planering</h1>
+                <p class="subtitle">Skrivskyddad översikt av implementationsplanen</p>
+            </div>
+        </div>
+        <div class="header-controls">
+            <a href="index.html" class="control-btn">← Tillbaka till hubben</a>
+        </div>
+    </header>
+
+    <main class="planning-main">
+        <p id="planningStatus" class="planning-status" role="status">Laddar uppgifter…</p>
+
+        <div class="kanban" id="kanban">
+            <section class="kanban-column" aria-labelledby="col-now-title">
+                <h2 id="col-now-title" class="kanban-column-title">Nu <span class="kanban-count" data-count="now"></span></h2>
+                <ul class="kanban-list" data-column="now" aria-labelledby="col-now-title"></ul>
+            </section>
+            <section class="kanban-column" aria-labelledby="col-next-title">
+                <h2 id="col-next-title" class="kanban-column-title">Härnäst <span class="kanban-count" data-count="next"></span></h2>
+                <ul class="kanban-list" data-column="next" aria-labelledby="col-next-title"></ul>
+            </section>
+            <section class="kanban-column" aria-labelledby="col-later-title">
+                <h2 id="col-later-title" class="kanban-column-title">Senare <span class="kanban-count" data-count="later"></span></h2>
+                <ul class="kanban-list" data-column="later" aria-labelledby="col-later-title"></ul>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+    <script src="config.js"></script>
+    <script src="planning.js"></script>
+</body>
+</html>
