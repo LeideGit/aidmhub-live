@@ -1,55 +1,56 @@
 #!/bin/bash
-# Verification script for AI DM HUB
-# Runs setup, spec validation, testes, and report generation
+# Verification for AI DM HUB. Runs only checks that exist and reports
+# each result honestly. A skipped or missing check is reported as such,
+# never as passed.
 
-set -e
+cd "$(dirname "$0")/.." || exit 1
 
-echo "================================"
-echo "AI DM HUB – Verification"
-echo "================================"
-echo ""
+failed=0
+results=()
 
-# Run setup first
-echo "Step 1: Running setup..."
-./scripts/setup.sh
-echo ""
+run_check() {
+    local name="$1"; shift
+    echo "--- $name"
+    if "$@"; then
+        results+=("PASS  $name")
+    else
+        results+=("FAIL  $name")
+        failed=1
+    fi
+    echo
+}
 
-# Validate specs
-echo "Step 2: Validating specifications..."
+skip_check() {
+    results+=("SKIP  $1 ($2)")
+    echo "--- $1: skipped ($2)"
+    echo
+}
+
+run_check "JavaScript syntax (src/app.js, src/api.js, src/mockData.js)" \
+    bash -c 'node --check src/app.js && node --check src/api.js && node --check src/mockData.js'
+
+run_check "Bot guard tests (SEC-001/002/003)" node scripts/test-guard.mjs
+
 if [ -f "./scripts/validate-specs.sh" ]; then
-    ./scripts/validate-specs.sh
+    run_check "Spec validation" ./scripts/validate-specs.sh
 else
-    echo "⚠ validate-specs.sh not found"
+    skip_check "Spec validation" "scripts/validate-specs.sh not present"
 fi
-echo ""
 
-# Run evals (if implemented)
-echo "Step 3: Running evaluations..."
 if [ -f "./scripts/run-evals.sh" ]; then
-    ./scripts/run-evals.sh
+    run_check "Evals" ./scripts/run-evals.sh
 else
-    echo "⚠ run-evals.sh not found (evals pending implementation)"
+    skip_check "Evals" "scripts/run-evals.sh not present; no evals executed"
 fi
-echo ""
-
-# Generate reports
-echo "Step 4: Generating reports..."
-if [ -f "./scripts/generate-reports.sh" ]; then
-    ./scripts/generate-reports.sh
-else
-    echo "⚠ generate-reports.sh not found (reports templates exist, manual update needed)"
-    echo "  See: reports/readiness.md, reports/traceability.md, reports/evaluation.md"
-fi
-echo ""
 
 echo "================================"
-echo "Verification Complete"
+echo "Verification summary"
 echo "================================"
-echo ""
-echo "Summary:"
-echo "✓ Setup: Complete"
-echo "✓ Specs: Ready (validation pending)"
-echo "✓ Evals: Ready (execution pending)"
-echo "✓ Reports: Templates created"
-echo ""
-echo "Next: Run ./scripts/run.sh to start the prototype"
+printf '%s\n' "${results[@]}"
+echo
+if [ "$failed" -eq 0 ]; then
+    echo "All executed checks passed. SKIP lines were not run."
+else
+    echo "One or more checks FAILED."
+fi
+exit "$failed"

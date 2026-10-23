@@ -11,6 +11,8 @@
     --color-text: #24292f;
     --color-text-secondary: #57606a;
     --color-focus: #0066cc;
+    --focus-width: 4px;
+    --focus-offset: 2px;
 
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
@@ -177,8 +179,8 @@ body {
 }
 
 .control-btn:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
 }
 
 .control-btn.reset-btn {
@@ -252,8 +254,8 @@ body {
 }
 
 .dm-item:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: -2px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
 }
 
 .dm-item-icon-wrapper {
@@ -790,8 +792,8 @@ body {
 }
 
 .action-btn:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
 }
 
 /* Input Area */
@@ -815,8 +817,8 @@ body {
 }
 
 .message-input:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: -1px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
     border-color: var(--color-focus);
 }
 
@@ -837,8 +839,8 @@ body {
 }
 
 .send-btn:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
 }
 
 /* Modals */
@@ -925,8 +927,8 @@ body {
 }
 
 .modal-input:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: -1px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
     border-color: var(--color-focus);
 }
 
@@ -992,8 +994,8 @@ body {
 
 .btn-cancel:focus,
 .btn-save:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
 }
 
 /* Responsive Design */
@@ -1162,8 +1164,8 @@ body {
 .composer-option.active,
 .composer-option:hover {
     background: var(--color-bg-secondary);
-    outline: 2px solid var(--color-focus);
-    outline-offset: -2px;
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
 }
 
 .composer-empty {

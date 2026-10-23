@@ -788,7 +788,7 @@ class AIHubApp {
         results.forEach(user => {
             const div = document.createElement("div");
             div.className = "search-result-item";
-            div.innerHTML = `<strong>${user.name}</strong><br><small>${user.role}</small>`;
+            div.innerHTML = `<strong>${this.escape(user.name)}</strong><br><small>${this.escape(user.role)}</small>`;
             div.style.cursor = "pointer";
             div.addEventListener("click", () => {
                 document.getElementById("delegationRecipient").value = user.name;
