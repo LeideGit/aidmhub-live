@@ -158,7 +158,7 @@ cd /Users/johanleidefors/Claude/AI\ DM\ HUB
 
 | Blocker | Åtgärd | Status |
 |---------|--------|--------|
-| OQ-002 – Mockdata-godkännande | Implementationsteamet och produktteamet fastställer innehål | [TBD] |
+| OQ-002 – Mockdata-godkännande | Implementationsteamet och produktteamet fastställer innehål | Godkänt av projektägaren (beslut i planläge, 2026-10-23). Formellt UX-godkännande ej dokumenterat. |
 | OQ-001 – Frontend-ramverk | Accepterat: Vanilla HTML/CSS/JS (ADR-001) | Resolved |
 | Responsiv design tidspress | Prioritera desktop-first, tablet/mobil i Fas 5 | Active |
 

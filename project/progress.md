@@ -6,9 +6,9 @@
 ## Status per Fas
 
 ### Fas 1 – Grundläggande UI-struktur
-- [x] **FEAT-DM-list** – **IN PROGRESS** (HTML, CSS implementerad; mockdata inkluderat)
-- [x] **FEAT-responsive** – **IN PROGRESS** (Desktop-first + media queries för tablet/mobil)
-- [ ] FEAT-accessibility (Fas 1-delen) – In Progress (ARIA labels tillagda, fokus-hantering fungerar)
+- [x] **FEAT-DM-list** – **KLAR** (Playwright: typetikett Person/Bot, aria-label, Tab/Enter/Space; verifierad 2026-10-23)
+- [x] **FEAT-responsive** – **KLAR** (Playwright: ingen horisontell scroll vid 1920/768/375 px; mobil DM-lista åtgärdad, två poster synliga vid 375 px)
+- [x] FEAT-accessibility (Fas 1-delen) – **KLAR för DM-listan** (tangentbord, fokusring, aria-attribut verifierade i Chromium). Skärmläsartest ej gjort (Fas 5).
 
 ### Fas 2 – Kärnflöde
 - [x] **FEAT-critical-alert** – **IN PROGRESS** (10-sekunderslarmet implementerat, eskalering fungerar)
@@ -55,17 +55,14 @@
 | AC-009 | @-sökning fungerar | Not Started | 3 | AC-005 |
 | AC-010 | /-sökning fungerar | Not Started | 3 | AC-005 |
 | AC-011 | Historiken är kronologisk | Not Started | 4 | AC-008 |
-| AC-012 | DM-lista innehåller människor och botar | Not Started | 1 | OQ-002 |
+| AC-012 | DM-lista innehåller människor och botar | Verifierad (Playwright, Chromium) | 1 | – |
 | AC-013 | Scenario kan återställas | Not Started | 5 | AC-001 |
 | AC-014 | Responsiv och a11y | In Progress | 1, 5 | Setup-skript |
 | AC-015 | Ingen maskinstyrning, fiktiv data | Not Started | 5 | AC-011 |
 
 ## Kritiska blockerare
 
-1. **OQ-002 – Mockdata-innehål:** Vilka maskiner, botar, kollegor, larmtexter ska användas?
-   - **Ägare:** UX/projektteamet.
-   - **Nästa steg:** Fastställ mockinnehål innan Fas 1 börjar.
-   - **Impact:** Blockerar alla features som beror på mockdata.
+1. ~~**OQ-002 – Mockdata-innehål**~~ **Godkänt av projektägaren 2026-10-23** (beslut i planläge). Formellt UX-/projektteamsgodkännande är inte dokumenterat och behövs innan demon godkänns.
 
 ## Säkerhetskontroller
 

@@ -1,5 +1,6 @@
 // Mock Data för AI DM HUB
 // All data is fictional and for demonstration purposes only
+// Mockinnehållet är godkänt av projektägaren (OQ-002, 2026-10-23). Formellt UX-godkännande är ej dokumenterat.
 
 const mockData = {
     version: "1.0",

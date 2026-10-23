@@ -285,6 +285,16 @@ body {
     flex: 1;
 }
 
+.dm-item-type {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
 .dm-item-name {
     font-weight: 600;
     font-size: var(--font-size-base);
@@ -1066,7 +1076,7 @@ body {
     }
 
     .dm-list-panel {
-        max-height: 100px;
+        max-height: 300px;
     }
 
     .message-content {

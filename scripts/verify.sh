@@ -33,6 +33,12 @@ run_check "Bot guard tests (SEC-001/002/003)" node scripts/test-guard.mjs
 
 run_check "Planning board data matches project/progress.md" node scripts/build-planning.mjs --check
 
+if [ -d "node_modules/@playwright/test" ]; then
+    run_check "Browser tests: Fas 1 DM list, keyboard, responsive (Playwright)" npx playwright test
+else
+    skip_check "Browser tests (Playwright)" "run: npm install && npx playwright install chromium"
+fi
+
 if [ -f "./scripts/validate-specs.sh" ]; then
     run_check "Spec validation" ./scripts/validate-specs.sh
 else

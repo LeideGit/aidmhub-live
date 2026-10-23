@@ -338,24 +338,32 @@ class AIHubApp {
             const bot = participants.find(p => p.type === "bot");
             const user = participants.find(p => p.type === "human");
 
-            // Determine icon and name
+            // Determine icon, type label and name
             let icon = "👤";
+            let typeLabel = "Person";
             let name = conv.title || "Unknown";
 
             if (bot) {
                 icon = "🤖";
+                typeLabel = "Bot";
                 name = conv.title || bot.name;
             } else if (user) {
-                icon = "👤";
                 name = conv.title || user.name;
             }
 
+            const unreadText = conv.unreadCount > 0 ? `, ${conv.unreadCount} oläst` : "";
+            li.tabIndex = 0;
+            li.setAttribute("role", "listitem");
+            li.setAttribute("aria-label", `${typeLabel}: ${name}${unreadText}`);
+            if (this.currentConversationId === conv.conversationId) li.setAttribute("aria-current", "true");
+
             li.innerHTML = `
                 <div class="dm-item-icon-wrapper">
-                    <div class="dm-item-icon">${icon}</div>
+                    <div class="dm-item-icon" aria-hidden="true">${icon}</div>
                     ${conv.unreadCount > 0 ? `<div class="dm-item-badge">${conv.unreadCount}</div>` : ""}
                 </div>
                 <div class="dm-item-content">
+                    <div class="dm-item-type">${typeLabel}</div>
                     <div class="dm-item-name">${this.escape(name)}</div>
                     <div class="dm-item-preview">${this.escape(conv.lastMessage)}</div>
                     <div class="dm-item-meta">
@@ -365,7 +373,14 @@ class AIHubApp {
                 </div>
             `;
 
-            li.addEventListener("click", () => this.showConversation(conv.conversationId));
+            const open = () => this.showConversation(conv.conversationId);
+            li.addEventListener("click", open);
+            li.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    open();
+                }
+            });
             this.dmList.appendChild(li);
         });
     }

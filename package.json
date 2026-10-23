@@ -1,0 +1,11 @@
+{
+  "name": "aidmhub-live",
+  "private": true,
+  "description": "AI DM HUB – lokal prototyp. Körtidskod är vanilla HTML/CSS/JS; devDependencies används endast för tester.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
