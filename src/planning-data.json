@@ -1,0 +1,102 @@
+{
+  "source": "project/progress.md",
+  "lastUpdated": "2024-10-14",
+  "features": [
+    {
+      "featureId": "FEAT-DM-list",
+      "scope": null,
+      "phase": 1,
+      "status": "in_progress",
+      "statusText": "IN PROGRESS",
+      "note": "HTML, CSS implementerad; mockdata inkluderat"
+    },
+    {
+      "featureId": "FEAT-responsive",
+      "scope": null,
+      "phase": 1,
+      "status": "in_progress",
+      "statusText": "IN PROGRESS",
+      "note": "Desktop-first + media queries för tablet/mobil"
+    },
+    {
+      "featureId": "FEAT-accessibility",
+      "scope": "Fas 1-delen",
+      "phase": 1,
+      "status": "in_progress",
+      "statusText": "In Progress",
+      "note": "ARIA labels tillagda, fokus-hantering fungerar"
+    },
+    {
+      "featureId": "FEAT-critical-alert",
+      "scope": null,
+      "phase": 2,
+      "status": "in_progress",
+      "statusText": "IN PROGRESS",
+      "note": "10-sekunderslarmet implementerat, eskalering fungerar"
+    },
+    {
+      "featureId": "FEAT-conversation",
+      "scope": null,
+      "phase": 2,
+      "status": "in_progress",
+      "statusText": "IN PROGRESS",
+      "note": "Botdialog, mockade svar, separerad data/tolkning/rekommendation"
+    },
+    {
+      "featureId": "FEAT-actions",
+      "scope": null,
+      "phase": 3,
+      "status": "in_progress",
+      "statusText": "IN PROGRESS",
+      "note": "Beslut-, delegerings-, åtgärd-modals implementerade; spara med metadata"
+    },
+    {
+      "featureId": "FEAT-mentions",
+      "scope": null,
+      "phase": 3,
+      "status": "pending",
+      "statusText": "Pending",
+      "note": "@ -sökning inte implementerad än"
+    },
+    {
+      "featureId": "FEAT-slashcommands",
+      "scope": null,
+      "phase": 3,
+      "status": "pending",
+      "statusText": "Pending",
+      "note": "/ -sökning inte implementerad än"
+    },
+    {
+      "featureId": "FEAT-history",
+      "scope": null,
+      "phase": 4,
+      "status": "in_progress",
+      "statusText": "IN PROGRESS",
+      "note": "Historik-panel, kronologisk rendering implementerad"
+    },
+    {
+      "featureId": "FEAT-demo-reset",
+      "scope": null,
+      "phase": 5,
+      "status": "pending",
+      "statusText": "Pending",
+      "note": "Pending"
+    },
+    {
+      "featureId": "FEAT-accessibility",
+      "scope": "Fas 5-delen",
+      "phase": 5,
+      "status": "pending",
+      "statusText": "Pending",
+      "note": "Pending"
+    },
+    {
+      "featureId": "FEAT-security-barriers",
+      "scope": null,
+      "phase": 5,
+      "status": "pending",
+      "statusText": "Pending",
+      "note": "Pending"
+    }
+  ]
+}

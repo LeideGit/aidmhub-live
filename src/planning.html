@@ -14,7 +14,7 @@
             <div class="logo">🗂️</div>
             <div class="header-text">
                 <h1>Planering</h1>
-                <p class="subtitle">Skrivskyddad översikt av implementationsplanen</p>
+                <p class="subtitle">Skrivskyddad statusbild av projektet, från project/progress.md</p>
             </div>
         </div>
         <div class="header-controls">
@@ -23,26 +23,24 @@
     </header>
 
     <main class="planning-main">
-        <p id="planningStatus" class="planning-status" role="status">Laddar uppgifter…</p>
+        <p id="planningStatus" class="planning-status" role="status">Laddar status…</p>
 
         <div class="kanban" id="kanban">
-            <section class="kanban-column" aria-labelledby="col-now-title">
-                <h2 id="col-now-title" class="kanban-column-title">Nu <span class="kanban-count" data-count="now"></span></h2>
-                <ul class="kanban-list" data-column="now" aria-labelledby="col-now-title"></ul>
+            <section class="kanban-column" aria-labelledby="col-done-title">
+                <h2 id="col-done-title" class="kanban-column-title">Klart <span class="kanban-count" data-count="done"></span></h2>
+                <ul class="kanban-list" data-column="done" aria-labelledby="col-done-title"></ul>
             </section>
-            <section class="kanban-column" aria-labelledby="col-next-title">
-                <h2 id="col-next-title" class="kanban-column-title">Härnäst <span class="kanban-count" data-count="next"></span></h2>
-                <ul class="kanban-list" data-column="next" aria-labelledby="col-next-title"></ul>
+            <section class="kanban-column" aria-labelledby="col-progress-title">
+                <h2 id="col-progress-title" class="kanban-column-title">Pågår <span class="kanban-count" data-count="in_progress"></span></h2>
+                <ul class="kanban-list" data-column="in_progress" aria-labelledby="col-progress-title"></ul>
             </section>
-            <section class="kanban-column" aria-labelledby="col-later-title">
-                <h2 id="col-later-title" class="kanban-column-title">Senare <span class="kanban-count" data-count="later"></span></h2>
-                <ul class="kanban-list" data-column="later" aria-labelledby="col-later-title"></ul>
+            <section class="kanban-column" aria-labelledby="col-pending-title">
+                <h2 id="col-pending-title" class="kanban-column-title">Väntar <span class="kanban-count" data-count="pending"></span></h2>
+                <ul class="kanban-list" data-column="pending" aria-labelledby="col-pending-title"></ul>
             </section>
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
-    <script src="config.js"></script>
     <script src="planning.js"></script>
 </body>
 </html>

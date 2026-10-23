@@ -31,6 +31,8 @@ run_check "JavaScript syntax (src/app.js, src/api.js, src/mockData.js)" \
 
 run_check "Bot guard tests (SEC-001/002/003)" node scripts/test-guard.mjs
 
+run_check "Planning board data matches project/progress.md" node scripts/build-planning.mjs --check
+
 if [ -f "./scripts/validate-specs.sh" ]; then
     run_check "Spec validation" ./scripts/validate-specs.sh
 else
